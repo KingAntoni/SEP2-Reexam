@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/SEP2-Reexam.iml" filepath="$PROJECT_DIR$/.idea/SEP2-Reexam.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
     </modules>
   </component>
 </project>
