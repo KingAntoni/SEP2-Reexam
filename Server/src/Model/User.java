@@ -1,4 +1,4 @@
-package Server.Model;
+package Model;
 
 import java.io.Serializable;
 public class User implements Serializable{
