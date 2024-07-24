@@ -7,4 +7,6 @@ import java.sql.SQLException;
 
 public interface RMIServer extends Remote {
     boolean addField(String name, String description) throws IOException, SQLException;
+
+    void addFacility(String name, String description);
 }

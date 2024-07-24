@@ -1,4 +1,4 @@
-package server.Model;
+package Server.Model;
 
 public class Facility {
     private String name;

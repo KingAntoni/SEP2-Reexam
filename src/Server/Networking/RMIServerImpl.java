@@ -1,6 +1,8 @@
 package server.Networking;
 
 import Server.Data.FieldsData;
+import Server.Networking.RMIServer;
+
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -34,5 +36,10 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void addFacility(String name, String description) {
+
     }
 }
