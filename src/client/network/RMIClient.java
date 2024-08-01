@@ -1,6 +1,6 @@
-package Client.Networking;
+package client.network;
 
-import Server.Networking.RMIServer;
+import server.network.RMIServer;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.rmi.Naming;
@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 
-public class RMIClient implements Client {
+public class RMIClient implements Client, ClientCallBack {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private RMIServer server;
     private String username;
@@ -20,17 +20,27 @@ public class RMIClient implements Client {
     }
 
     @Override
-    public void addFacility(String name, String description) throws IOException, SQLException {
-        server.addFacility(name, description);
+    public boolean  createFacility(String name, String description) throws IOException, SQLException {
+        server.createFacility(name, description);
     }
 
     public static void main(String[] args) {
         try {
             RMIClient client = new RMIClient();
-            client.addFacility("TestFacility", "This is a test description.");
+            client.createFacility("TestFacility", "This is a test description.");
             System.out.println("Facility added.");
         } catch (RemoteException | NotBoundException | IOException | SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void addListener(String eventName, PropertyChangeListener listener) {
+        support.addPropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void removeListener(String eventName, PropertyChangeListener listener) {
+        support.removePropertyChangeListener(eventName, listener);
     }
 }

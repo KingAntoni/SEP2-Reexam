@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 import server.Networking.RMIServerImpl;
 import java.io.IOException;
