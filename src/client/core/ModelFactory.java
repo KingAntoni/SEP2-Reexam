@@ -27,7 +27,7 @@ public class ModelFactory {
             throws IOException, NotBoundException, SQLException
     {
         if(sportFacilityModel==null)
-            sportFacilityModel = new SportFacilityModelManager(ClientFactory.getInstance().getClient());
+            sportFacilityModel = new SportFacilityModelManager();
         return sportFacilityModel;
     }
 

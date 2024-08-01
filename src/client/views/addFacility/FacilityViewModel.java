@@ -1,14 +1,11 @@
 package client.views.addFacility;
 
-
 import client.network.Client;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.sql.SQLException;
-import java.util.List;
 
 public class FacilityViewModel {
     private Client client;

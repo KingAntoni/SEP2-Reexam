@@ -3,6 +3,7 @@ package client.core;
 import client.network.Client;
 import client.network.RMIClient;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public class ClientFactory {
@@ -22,8 +23,7 @@ public class ClientFactory {
         }
         return instance;
     }
-    public Client getClient() throws RemoteException
-    {
+    public Client getClient() throws RemoteException, NotBoundException {
         if(client ==null)
         {
             client = new RMIClient();
