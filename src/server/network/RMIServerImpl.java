@@ -1,8 +1,7 @@
 package server.network;
 
 import server.model.Manager;
-import shared.networking.RMIServer;
-import server.model.*;
+import server.network.RMIServer;
 import server.database.FacilitiesData;
 
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class RMIServerImpl implements RMIServer {
 
@@ -21,7 +19,7 @@ public class RMIServerImpl implements RMIServer {
 
     public RMIServerImpl(Manager manager) throws SQLException {
         this.manager = manager;
-        facilitiesData = FacilitiesData.getInstance();
+        this.facilitiesData = FacilitiesData.getInstance();
     }
 
     public void startServer() throws IOException, AlreadyBoundException, SQLException {
@@ -31,13 +29,15 @@ public class RMIServerImpl implements RMIServer {
     }
 
     @Override
-    public boolean addFacility(String name, String description) throws IOException, SQLException {
+    public boolean createFacility(String name, String description) throws IOException, SQLException {
         if (facilitiesData.getFacilityByName(name) == null) {
-            if (name == null || description == null)
+            if (name == null || description == null) {
                 return false;
+            }
             facilitiesData.create(name, description);
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 }

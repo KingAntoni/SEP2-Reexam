@@ -6,5 +6,5 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public interface RMIServer extends Remote {
-    boolean addFacility(String name, String description) throws IOException, SQLException;
+    boolean createFacility(String name, String description) throws IOException, SQLException;
 }

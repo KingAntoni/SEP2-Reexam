@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 
-public class RMIClient implements Client, ClientCallBack {
+public class RMIClient implements Client {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private RMIServer server;
     private String username;
@@ -34,13 +34,4 @@ public class RMIClient implements Client, ClientCallBack {
         }
     }
 
-    @Override
-    public void addListener(String eventName, PropertyChangeListener listener) {
-        support.addPropertyChangeListener(eventName, listener);
-    }
-
-    @Override
-    public void removeListener(String eventName, PropertyChangeListener listener) {
-        support.removePropertyChangeListener(eventName, listener);
-    }
 }
