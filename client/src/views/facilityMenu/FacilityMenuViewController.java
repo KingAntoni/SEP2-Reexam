@@ -34,11 +34,16 @@ public class FacilityMenuViewController implements ViewController {
         // This method will be called by the FXMLLoader
     }
 
-    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler) throws IOException, SQLException {
-        this.viewHandler = viewHandler;
-        facilityMenuViewModel = viewModelFactory.getFacilityMenuVM();
-        bindTableColumns();
-        facilityTableView.setItems(facilityMenuViewModel.getFacilities());
+
+    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler) {
+        try {
+            facilityMenuViewModel = viewModelFactory.getFacilityMenuVM();
+            bindTableColumns();
+            facilityTableView.setItems(facilityMenuViewModel.getFacilities());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
+        }
     }
 
     private void bindTableColumns() {
@@ -48,8 +53,10 @@ public class FacilityMenuViewController implements ViewController {
 
     @FXML
     public void addFacilityButton(ActionEvent actionEvent) {
-        viewHandler.openCreateFacility();
+        // Code to open the add facility view
+        ViewHandler.getInstance().openCreateFacility();
     }
+
 
     @FXML
     public void editFacilityButton(ActionEvent actionEvent) {

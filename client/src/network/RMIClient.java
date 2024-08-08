@@ -54,8 +54,11 @@ public class RMIClient extends UnicastRemoteObject implements Client {
 
     @Override
     public List<Facility> readAllFacilities() throws IOException, SQLException {
-        return server.readAllFacilities();
+        List<Facility> facilities = server.readAllFacilities();
+        facilities.forEach(facility -> System.out.println("Client received facility: " + facility));
+        return facilities;
     }
+
 
     public static void main(String[] args) {
         try {

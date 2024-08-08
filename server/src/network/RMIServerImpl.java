@@ -142,13 +142,16 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String description = rs.getString("description");
-                facilities.add(new Facility(id, title, description));
+                Facility facility = new Facility(id, title, description);
+                facilities.add(facility);
+                System.out.println("Server retrieved facility: " + facility);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return facilities;
     }
+
 
     @Override
     public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws RemoteException, IOException, SQLException {

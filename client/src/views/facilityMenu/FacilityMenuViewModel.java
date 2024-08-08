@@ -15,7 +15,7 @@ public class FacilityMenuViewModel {
 
     public FacilityMenuViewModel(SportFacilityModel model) {
         this.model = model;
-        this.facilities = FXCollections.observableArrayList();
+        facilities = FXCollections.observableArrayList();
         loadFacilities();
     }
 
@@ -26,10 +26,12 @@ public class FacilityMenuViewModel {
     private void loadFacilities() {
         try {
             facilities.setAll(model.getAllFacilities());
+            facilities.forEach(facility -> System.out.println("Loaded facility: " + facility.getTitle())); // Add this line
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     public void deleteFacility(Facility facility) throws IOException, SQLException {
         if (model.deleteFacility(facility)) {
