@@ -14,7 +14,8 @@ public class ViewHandler {
 
     private Stage stage;
     private Scene createFacilityScene;
-    private Scene ScheduleScene;
+    private Scene scheduleScene;
+    private Scene facilityMenuScene;
     private static ViewHandler instance;
 
     private ViewHandler() {}
@@ -29,8 +30,7 @@ public class ViewHandler {
     public void start(Stage primaryStage) throws IOException, SQLException, NotBoundException {
         this.stage = primaryStage;
         System.out.println("Starting application...");
-        //openCreateFacility();
-        openFacilitySchedule();
+        openFacilityMenu();
     }
 
     public void openCreateFacility() {
@@ -52,15 +52,30 @@ public class ViewHandler {
         try {
             System.out.println("Opening Facility Schedule view...");
             Parent root = loadFXML("/views/facilitySchedule/FacilityScheduleView.fxml");
-            ScheduleScene = new Scene(root);
+            scheduleScene = new Scene(root);
         } catch (IOException | NotBoundException | SQLException e) {
             e.printStackTrace();
         }
 
         stage.setTitle("Schedule");
-        stage.setScene(ScheduleScene);
+        stage.setScene(scheduleScene);
         stage.show();
         System.out.println("Schedule Scene view opened.");
+    }
+
+    public void openFacilityMenu() {
+        try {
+            System.out.println("Opening Facility Menu view...");
+            Parent root = loadFXML("/views/facilityMenu/FacilityMenuView.fxml");
+            facilityMenuScene = new Scene(root);
+        } catch (IOException | NotBoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        stage.setTitle("Facility Menu");
+        stage.setScene(facilityMenuScene);
+        stage.show();
+        System.out.println("Facility Menu view opened.");
     }
 
     private Parent loadFXML(String path) throws IOException, NotBoundException, SQLException {
@@ -71,8 +86,10 @@ public class ViewHandler {
         System.out.println("FXML loaded.");
 
         ViewController ctrl = loader.getController();
-        ctrl.init();
+        ctrl.init();  // Initial init call
+        if (ctrl instanceof views.Menu.FacilityMenuViewController) {
+            ((views.Menu.FacilityMenuViewController) ctrl).init(ViewModelFactory.getInstance(), this);
+        }
         return root;
     }
-
 }

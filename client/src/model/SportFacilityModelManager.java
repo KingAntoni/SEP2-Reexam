@@ -39,4 +39,19 @@ public class SportFacilityModelManager implements SportFacilityModel {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public boolean editFacility(Facility facility) throws IOException, SQLException {
+        return client.editFacility(facility);
+    }
+
+    @Override
+    public boolean deleteFacility(Facility facility) throws IOException, SQLException {
+        return client.deleteFacility(facility);
+    }
+
+    @Override
+    public List<Facility> getAllFacilities() throws IOException, SQLException {
+        return client.readAllFacilities();  // Implement this method
+    }
 }

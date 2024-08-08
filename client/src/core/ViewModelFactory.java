@@ -1,6 +1,7 @@
 package core;
 
 import model.SportFacilityModel;
+import views.facilityMenu.FacilityMenuViewModel;
 import views.addFacility.FacilityViewModel;
 
 import java.io.IOException;
@@ -11,12 +12,13 @@ public class ViewModelFactory {
     private static ViewModelFactory instance;
 
     private FacilityViewModel createFacilityVM;
+    private FacilityMenuViewModel facilityMenuVM;
     private SportFacilityModel sportFacilityModel;
 
     private ViewModelFactory() throws IOException, NotBoundException, SQLException {
-        SportFacilityModel model = ModelFactory.getInstance().getModel();
-        createFacilityVM = new FacilityViewModel(model);
         sportFacilityModel = ModelFactory.getInstance().getModel();
+        createFacilityVM = new FacilityViewModel(sportFacilityModel);
+        facilityMenuVM = new FacilityMenuViewModel(sportFacilityModel);
     }
 
     public static synchronized ViewModelFactory getInstance() throws IOException, NotBoundException, SQLException {
@@ -28,6 +30,10 @@ public class ViewModelFactory {
 
     public FacilityViewModel getFacilityVM() {
         return createFacilityVM;
+    }
+
+    public FacilityMenuViewModel getFacilityMenuVM() {
+        return facilityMenuVM;
     }
 
     public SportFacilityModel getSportFacilityModel() {

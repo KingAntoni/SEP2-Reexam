@@ -94,6 +94,63 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
     }
 
     @Override
+    public boolean editFacility(Facility facility) throws RemoteException, IOException, SQLException {
+        String updateFacilitySQL = "UPDATE Facility SET title = ?, description = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateFacilitySQL)) {
+            pstmt.setString(1, facility.getTitle());
+            pstmt.setString(2, facility.getDescription());
+            pstmt.setInt(3, facility.getId());
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteFacility(Facility facility) throws RemoteException, IOException, SQLException {
+        String deleteFacilitySQL = "DELETE FROM Facility WHERE id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(deleteFacilitySQL)) {
+            pstmt.setInt(1, facility.getId());
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Facility> readAllFacilities() throws RemoteException, IOException, SQLException {
+        List<Facility> facilities = new ArrayList<>();
+        String query = "SELECT * FROM Facility";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                facilities.add(new Facility(id, title, description));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return facilities;
+    }
+
+    @Override
     public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws RemoteException, IOException, SQLException {
         List<Schedule> schedules = new ArrayList<>();
         String query = "SELECT Schedule.startTime, Schedule.endTime, User.username, User.password FROM Schedule " +

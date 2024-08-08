@@ -4,9 +4,7 @@ import network.Client;
 import network.RMIClient;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 
 public class ClientFactory {
 
