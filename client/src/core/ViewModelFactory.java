@@ -11,10 +11,12 @@ public class ViewModelFactory {
     private static ViewModelFactory instance;
 
     private FacilityViewModel createFacilityVM;
+    private SportFacilityModel sportFacilityModel;
 
     private ViewModelFactory() throws IOException, NotBoundException, SQLException {
         SportFacilityModel model = ModelFactory.getInstance().getModel();
         createFacilityVM = new FacilityViewModel(model);
+        sportFacilityModel = ModelFactory.getInstance().getModel();
     }
 
     public static synchronized ViewModelFactory getInstance() throws IOException, NotBoundException, SQLException {
@@ -26,5 +28,9 @@ public class ViewModelFactory {
 
     public FacilityViewModel getFacilityVM() {
         return createFacilityVM;
+    }
+
+    public SportFacilityModel getSportFacilityModel() {
+        return sportFacilityModel;
     }
 }

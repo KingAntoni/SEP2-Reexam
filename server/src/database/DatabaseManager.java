@@ -11,7 +11,7 @@ import java.sql.Statement;
 
 public class DatabaseManager {
     private static final String DATABASE_NAME = "facilities.db";
-    private static final String DATABASE_FOLDER = "/database/";
+    private static final String DATABASE_FOLDER = "src/database/";
     private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_FOLDER + DATABASE_NAME;
 
     static {
@@ -27,17 +27,35 @@ public class DatabaseManager {
         return DriverManager.getConnection(DATABASE_URL);
     }
 
-    public static void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS Facility (" +
+    public static void createTables() {
+        String userTable = "CREATE TABLE IF NOT EXISTS User (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "username TEXT NOT NULL," +
+                "password TEXT NOT NULL" +
+                ");";
+
+        String facilityTable = "CREATE TABLE IF NOT EXISTS Facility (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title TEXT NOT NULL," +
                 "description TEXT NOT NULL" +
                 ");";
 
+        String scheduleTable = "CREATE TABLE IF NOT EXISTS Schedule (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "startTime TEXT NOT NULL," +
+                "endTime TEXT NOT NULL," +
+                "userId INTEGER NOT NULL," +
+                "facilityId INTEGER NOT NULL," +
+                "FOREIGN KEY (userId) REFERENCES User(id)," +
+                "FOREIGN KEY (facilityId) REFERENCES Facility(id)" +
+                ");";
+
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("Facility table created or already exists.");
+            stmt.execute(userTable);
+            stmt.execute(facilityTable);
+            stmt.execute(scheduleTable);
+            System.out.println("Tables created or already exist.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

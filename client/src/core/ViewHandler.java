@@ -3,7 +3,6 @@ package core;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import views.ViewController;
 
@@ -15,6 +14,7 @@ public class ViewHandler {
 
     private Stage stage;
     private Scene createFacilityScene;
+    private Scene ScheduleScene;
     private static ViewHandler instance;
 
     private ViewHandler() {}
@@ -28,9 +28,9 @@ public class ViewHandler {
 
     public void start(Stage primaryStage) throws IOException, SQLException, NotBoundException {
         this.stage = primaryStage;
-        stage.getIcons().add(new Image("file:carrotIcon.png"));
         System.out.println("Starting application...");
-        openCreateFacility();
+        //openCreateFacility();
+        openFacilitySchedule();
     }
 
     public void openCreateFacility() {
@@ -46,6 +46,21 @@ public class ViewHandler {
         stage.setScene(createFacilityScene);
         stage.show();
         System.out.println("Create Facility view opened.");
+    }
+
+    public void openFacilitySchedule(){
+        try {
+            System.out.println("Opening Facility Schedule view...");
+            Parent root = loadFXML("/views/facilitySchedule/FacilityScheduleView.fxml");
+            ScheduleScene = new Scene(root);
+        } catch (IOException | NotBoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        stage.setTitle("Schedule");
+        stage.setScene(ScheduleScene);
+        stage.show();
+        System.out.println("Schedule Scene view opened.");
     }
 
     private Parent loadFXML(String path) throws IOException, NotBoundException, SQLException {

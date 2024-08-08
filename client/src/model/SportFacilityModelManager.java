@@ -2,14 +2,15 @@ package model;
 
 import network.Client;
 import transferObjects.Facility;
+import transferObjects.Schedule;
 
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 
 public class SportFacilityModelManager implements SportFacilityModel {
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private Client client;
+    private final Client client;
 
     public SportFacilityModelManager(Client client) {
         this.client = client;
@@ -18,16 +19,24 @@ public class SportFacilityModelManager implements SportFacilityModel {
     @Override
     public boolean createFacility(String title, String description) throws IOException, SQLException {
         Facility facility = new Facility(title, description);
-        return client.createFacility(facility);
+        return client.createFacility(title,description);
+    }
+    @Override
+    public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) {
+        try {
+            return client.getSchedulesForDate(date, facilityId);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public void addListener(String eventName, java.beans.PropertyChangeListener listener) {
-        support.addPropertyChangeListener(eventName, listener);
-    }
-
-    @Override
-    public void removeListener(String eventName, java.beans.PropertyChangeListener listener) {
-        support.removePropertyChangeListener(eventName, listener);
+    public void addSchedule(Schedule schedule) {
+        try {
+            client.addSchedule(schedule);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

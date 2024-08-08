@@ -12,6 +12,7 @@
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
+
     <TextField fx:id="facilityNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Facility Name"/>
     <TextField fx:id="facilityDescriptionField" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Description"/>
     <Button text="Create Facility" onAction="#createFacility" GridPane.columnIndex="1" GridPane.rowIndex="2"/>

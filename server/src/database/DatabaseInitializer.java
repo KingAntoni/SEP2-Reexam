@@ -7,7 +7,7 @@ public class DatabaseInitializer {
             Class.forName("org.sqlite.JDBC");
 
             DatabaseManager.initializeDatabase();
-            DatabaseManager.createTable();
+            DatabaseManager.createTables();
             System.out.println("Database and tables initialized.");
         } catch (ClassNotFoundException e) {
             System.err.println("Failed to load SQLite JDBC driver.");
