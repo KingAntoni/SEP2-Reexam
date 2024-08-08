@@ -5,10 +5,12 @@ import java.io.Serializable;
 public class User implements Serializable {
     private String username;
     private String password;
+    private boolean admin;
 
-    public User(String username, String password) {
+    public User(String username, String password, boolean admin) {
         this.username = username;
         this.password = password;
+        this.admin = admin;
     }
 
     public String getUsername() {
@@ -27,8 +29,15 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
     @Override
     public String toString() {
-        return "User [username=" + username + ", password=" + password + "]";
+        return "User [username=" + username + ", password=" + password + ", admin=" + admin + "]";
     }
 }

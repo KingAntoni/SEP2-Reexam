@@ -12,6 +12,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import views.ViewController;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -49,16 +51,6 @@ public class FacilityScheduleViewController implements ViewController {
         });
     }
 
-    public void init(FacilityScheduleViewModel viewModel) {
-        this.viewModel = viewModel;
-
-        // Bind schedule list view to the view model
-        scheduleListView.itemsProperty().bind(Bindings.createObjectBinding(viewModel::getScheduleList));
-
-        // Load initial schedule for today using view model
-        viewModel.loadSchedule(LocalDate.now());
-    }
-
     private void loadInitialSchedule(LocalDate date) {
         scheduleListView.getItems().clear();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -87,13 +79,13 @@ public class FacilityScheduleViewController implements ViewController {
     }
 
     @FXML
-    private void reserve() {
+    private void reserve() throws SQLException, IOException {
         if (datePicker.getValue() == null) {
             showAlert(AlertType.ERROR, "Form Error!", "Please select a date.");
             return;
         }
         // Assuming a logged-in user is available
-        User user = new User("currentUsername", "password"); // Replace with actual user
+        User user = new User("currentUsername", "password", false); // Replace with actual user
         viewModel.reserve(user);
         showAlert(AlertType.INFORMATION, "Reservation Successful", "Your reservation has been made.");
         loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list

@@ -6,7 +6,6 @@ import transferObjects.Schedule;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class SportFacilityModelManager implements SportFacilityModel {
@@ -18,13 +17,13 @@ public class SportFacilityModelManager implements SportFacilityModel {
 
     @Override
     public boolean createFacility(String title, String description) throws IOException, SQLException {
-        Facility facility = new Facility(title, description);
-        return client.createFacility(title,description);
+        return client.createFacility(title, description);
     }
+
     @Override
-    public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) {
+    public List<Schedule> getAllSchedules() throws IOException, SQLException {
         try {
-            return client.getSchedulesForDate(date, facilityId);
+            return client.getAllSchedules();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
             return null;
@@ -32,9 +31,9 @@ public class SportFacilityModelManager implements SportFacilityModel {
     }
 
     @Override
-    public void addSchedule(Schedule schedule) {
+    public void reserveFacility(Schedule schedule) throws IOException, SQLException {
         try {
-            client.addSchedule(schedule);
+            client.reserveFacility(schedule);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }

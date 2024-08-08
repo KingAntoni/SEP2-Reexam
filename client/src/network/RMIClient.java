@@ -9,33 +9,30 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class RMIClient extends UnicastRemoteObject implements Client {
     private RMIServer server;
-    private Client client;
-
 
     public RMIClient() throws IOException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-        //server = (RMIServer) registry.lookup("Server");
+        server = (RMIServer) registry.lookup("Server");
     }
 
     @Override
-    public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws IOException, SQLException {
-        return server.getSchedulesForDate(date, facilityId);
+    public List<Schedule> getAllSchedules() throws IOException, SQLException {
+        return server.getAllSchedules();
     }
 
     @Override
-    public void addSchedule(Schedule schedule) throws IOException, SQLException {
-        server.addSchedule(schedule);
+    public void reserveFacility(Schedule schedule) throws IOException, SQLException {
+        server.reserveFacility(schedule);
     }
 
     @Override
     public boolean createFacility(String title, String description) throws IOException, SQLException {
         Facility facility = new Facility(title, description);
-        return client.createFacility(title,description);
+        return server.createFacility(facility);
     }
 
     public static void main(String[] args) {

@@ -15,6 +15,7 @@ public class ViewHandler {
     private Stage stage;
     private Scene createFacilityScene;
     private Scene ScheduleScene;
+    private Scene loginScene;
     private static ViewHandler instance;
 
     private ViewHandler() {}
@@ -30,7 +31,8 @@ public class ViewHandler {
         this.stage = primaryStage;
         System.out.println("Starting application...");
         //openCreateFacility();
-        openFacilitySchedule();
+        //openFacilitySchedule();
+        openLoginView();
     }
 
     public void openCreateFacility() {
@@ -63,6 +65,21 @@ public class ViewHandler {
         System.out.println("Schedule Scene view opened.");
     }
 
+    public void openLoginView() {
+        try {
+            System.out.println("Opening Logging view...");
+            Parent root = loadFXML("/views/login/LoginView.fxml");
+            loginScene = new Scene(root);
+        } catch (IOException | NotBoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        stage.setTitle("Log in");
+        stage.setScene(loginScene);
+        stage.show();
+        System.out.println("log in view opened.");
+    }
+
     private Parent loadFXML(String path) throws IOException, NotBoundException, SQLException {
         FXMLLoader loader = new FXMLLoader();
         System.out.println("Loading FXML from path: " + path);
@@ -74,5 +91,4 @@ public class ViewHandler {
         ctrl.init();
         return root;
     }
-
 }
