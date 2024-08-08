@@ -11,4 +11,5 @@ public interface SportFacilityModel {
     boolean createFacility(String title, String description) throws IOException, SQLException;
     List<Schedule> getAllSchedules() throws IOException, SQLException;
     void reserveFacility(Schedule schedule) throws IOException, SQLException;
+    boolean logIn(String username, String password) throws IOException, SQLException;
 }

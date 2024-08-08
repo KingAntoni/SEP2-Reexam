@@ -5,6 +5,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import views.ViewController;
+import views.login.LoginViewController;
+import views.login.LoginViewModel;
+import views.facilitySchedule.FacilityScheduleViewModel;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -14,7 +17,7 @@ public class ViewHandler {
 
     private Stage stage;
     private Scene createFacilityScene;
-    private Scene ScheduleScene;
+    private Scene scheduleScene;
     private Scene loginScene;
     private static ViewHandler instance;
 
@@ -30,8 +33,6 @@ public class ViewHandler {
     public void start(Stage primaryStage) throws IOException, SQLException, NotBoundException {
         this.stage = primaryStage;
         System.out.println("Starting application...");
-        //openCreateFacility();
-        //openFacilitySchedule();
         openLoginView();
     }
 
@@ -54,30 +55,36 @@ public class ViewHandler {
         try {
             System.out.println("Opening Facility Schedule view...");
             Parent root = loadFXML("/views/facilitySchedule/FacilityScheduleView.fxml");
-            ScheduleScene = new Scene(root);
+            scheduleScene = new Scene(root);
         } catch (IOException | NotBoundException | SQLException e) {
             e.printStackTrace();
         }
 
         stage.setTitle("Schedule");
-        stage.setScene(ScheduleScene);
+        stage.setScene(scheduleScene);
         stage.show();
         System.out.println("Schedule Scene view opened.");
     }
 
     public void openLoginView() {
         try {
-            System.out.println("Opening Logging view...");
-            Parent root = loadFXML("/views/login/LoginView.fxml");
+            System.out.println("Opening Login view...");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login/LoginView.fxml"));
+            Parent root = loader.load();
+
+            LoginViewController ctrl = loader.getController();
+            LoginViewModel viewModel = new LoginViewModel();
+            ctrl.init();
+
             loginScene = new Scene(root);
-        } catch (IOException | NotBoundException | SQLException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         stage.setTitle("Log in");
         stage.setScene(loginScene);
         stage.show();
-        System.out.println("log in view opened.");
+        System.out.println("Log in view opened.");
     }
 
     private Parent loadFXML(String path) throws IOException, NotBoundException, SQLException {

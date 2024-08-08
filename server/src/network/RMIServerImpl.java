@@ -32,13 +32,36 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
     }
 
     @Override
+    public boolean login(User user) throws RemoteException, IOException, SQLException {
+        return checkUserCredentials(user);
+    }
+
+    private boolean checkUserCredentials(User user) {
+        String query = "SELECT * FROM User WHERE username = ? AND password = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getPassword());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return true; // User found
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // User not found
+    }
+
+    @Override
     public List<Schedule> getAllSchedules() throws RemoteException, IOException, SQLException {
         return fetchAllSchedulesFromDatabase();
     }
 
     @Override
-    public void reserveFacility(Schedule schedule) throws RemoteException, IOException, SQLException {
+    public boolean reserveFacility(Schedule schedule) throws RemoteException, IOException, SQLException {
         storeScheduleInDatabase(schedule);
+        return true;
     }
 
     private boolean storeFacilityInDatabase(Facility facility) {

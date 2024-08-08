@@ -3,6 +3,7 @@ package model;
 import network.Client;
 import transferObjects.Facility;
 import transferObjects.Schedule;
+import transferObjects.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,6 +37,16 @@ public class SportFacilityModelManager implements SportFacilityModel {
             client.reserveFacility(schedule);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean logIn(String username, String password) throws IOException, SQLException {
+        try {
+            return client.login(new User(username, password));
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

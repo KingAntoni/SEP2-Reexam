@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseManager {
     private static final String DATABASE_NAME = "facilities.db";
@@ -31,7 +28,8 @@ public class DatabaseManager {
         String userTable = "CREATE TABLE IF NOT EXISTS User (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "username TEXT NOT NULL," +
-                "password TEXT NOT NULL" +
+                "password TEXT NOT NULL," +
+                "admin BOOLEAN NOT NULL" +
                 ");";
 
         String facilityTable = "CREATE TABLE IF NOT EXISTS Facility (" +
@@ -56,6 +54,39 @@ public class DatabaseManager {
             stmt.execute(facilityTable);
             stmt.execute(scheduleTable);
             System.out.println("Tables created or already exist.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createInitialUsers() {
+        String insertUserSQL = "INSERT INTO User (username, password, admin) VALUES (?, ?, ?)";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(insertUserSQL)) {
+
+            conn.setAutoCommit(false);
+
+            // Create 2 admin users
+            pstmt.setString(1, "admin1");
+            pstmt.setString(2, "password1");
+            pstmt.setBoolean(3, true);
+            pstmt.executeUpdate();
+
+            pstmt.setString(1, "admin2");
+            pstmt.setString(2, "password2");
+            pstmt.setBoolean(3, true);
+            pstmt.executeUpdate();
+
+            // Create 8 normal users
+            for (int i = 1; i <= 8; i++) {
+                pstmt.setString(1, "user" + i);
+                pstmt.setString(2, "password" + i);
+                pstmt.setBoolean(3, false);
+                pstmt.executeUpdate();
+            }
+
+            conn.commit();
+            System.out.println("Initial users created.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

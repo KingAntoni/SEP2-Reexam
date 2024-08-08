@@ -2,6 +2,7 @@ package network;
 
 import transferObjects.Facility;
 import transferObjects.Schedule;
+import transferObjects.User;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -25,14 +26,19 @@ public class RMIClient extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public void reserveFacility(Schedule schedule) throws IOException, SQLException {
-        server.reserveFacility(schedule);
+    public boolean reserveFacility(Schedule schedule) throws IOException, SQLException {
+        return server.reserveFacility(schedule);
     }
 
     @Override
     public boolean createFacility(String title, String description) throws IOException, SQLException {
         Facility facility = new Facility(title, description);
         return server.createFacility(facility);
+    }
+
+    @Override
+    public boolean login(User user) throws IOException, SQLException {
+        return server.login(user);
     }
 
     public static void main(String[] args) {
