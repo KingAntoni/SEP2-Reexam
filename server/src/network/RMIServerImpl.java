@@ -21,6 +21,8 @@ import java.util.List;
 
 public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
 
+    private boolean admin;
+
     public RMIServerImpl() throws RemoteException {
         super();
     }
@@ -34,6 +36,7 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
 
     @Override
     public boolean login(User user) throws RemoteException, IOException, SQLException {
+        admin = user.isAdmin();
         return checkUserCredentials(user);
     }
 
@@ -54,11 +57,6 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
             e.printStackTrace();
         }
         return false;
-    }
-
-    @Override
-    public List<Schedule> getAllSchedules() throws RemoteException, IOException, SQLException {
-        return fetchAllSchedulesFromDatabase();
     }
 
     @Override
@@ -155,36 +153,33 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
     }
 
     @Override
+    public void addSchedule(Schedule schedule) throws RemoteException, IOException, SQLException {
+
+    }
+
+    @Override
     public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws RemoteException, IOException, SQLException {
         List<Schedule> schedules = new ArrayList<>();
-        String query = "SELECT s.id, s.startTime, s.endTime, u.username, f.title " +
-                "FROM Schedule s " +
-                "JOIN User u ON s.userId = u.id " +
-                "JOIN Facility f ON s.facilityId = f.id " +
-                "WHERE s.facilityId = ? AND DATE(s.startTime) = ?";
+        String query = "SELECT Schedule.startTime, Schedule.endTime, User.username, User.password FROM Schedule " +
+                "JOIN User ON Schedule.userId = User.id " +
+                "WHERE DATE(Schedule.startTime) = ? AND Schedule.facilityId = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, facilityId);
-            pstmt.setDate(2, java.sql.Date.valueOf(date));
-
+            pstmt.setString(1, date.toString());
+            pstmt.setInt(2, facilityId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    Schedule schedule = new Schedule(
-                            LocalDateTime.parse(rs.getString("startTime")),
-                            LocalDateTime.parse(rs.getString("endTime")),
-                            new User(rs.getString("username"), "", true),
-                            facilityId
-                    );
-                    schedules.add(schedule);
+                    LocalDateTime startTime = LocalDateTime.parse(rs.getString("startTime"));
+                    LocalDateTime endTime = LocalDateTime.parse(rs.getString("endTime"));
+                    User user = new User(rs.getString("username"), rs.getString("password"));
+                    schedules.add(new Schedule(startTime, endTime, user, facilityId));
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
         return schedules;
     }
+
 
     private void storeScheduleInDatabase(Schedule schedule) {
         String insertUserSQL = "INSERT INTO User (username, password) VALUES (?, ?)";

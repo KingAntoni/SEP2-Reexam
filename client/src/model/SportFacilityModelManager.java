@@ -12,6 +12,7 @@ import java.util.List;
 
 public class SportFacilityModelManager implements SportFacilityModel {
     private final Client client;
+    private int facilityId;
     private User user = new User(null, null, false);
 
     public SportFacilityModelManager(Client client) {
@@ -19,27 +20,18 @@ public class SportFacilityModelManager implements SportFacilityModel {
     }
 
     @Override
-    public boolean createFacility(String title, String description) throws IOException, SQLException {
-        return client.createFacility(new Facility(title, description));
+    public boolean createFacility(Facility facility) throws IOException, SQLException {
+        return client.createFacility(facility);
     }
 
     @Override
-    public List<Schedule> getAllSchedules() throws IOException, SQLException {
-        try {
-            return client.getAllSchedules();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public void reserveFacility(Schedule schedule) throws IOException, SQLException {
+    public boolean reserveFacility(Schedule schedule) throws IOException, SQLException {
         try {
             schedule.setUser(user);
-            client.reserveFacility(schedule);
+            return client.reserveFacility(schedule);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -72,7 +64,12 @@ public class SportFacilityModelManager implements SportFacilityModel {
     }
 
     @Override
-    public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws IOException, SQLException {
-        return client.getSchedulesForDate(date, facilityId);
+    public List<Schedule> getSchedulesForDate(LocalDate date) {
+        try {
+            return client.getSchedulesForDate(date, facilityId);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

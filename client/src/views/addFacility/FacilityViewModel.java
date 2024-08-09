@@ -3,6 +3,7 @@ package views.addFacility;
 import model.SportFacilityModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import transferObjects.Facility;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -41,7 +42,7 @@ public class FacilityViewModel {
     }
 
     public void createFacility() throws IOException, SQLException {
-        model.createFacility(getFacilityName(), getFacilityDescription());
+        model.createFacility(new Facility(getFacilityName(), getFacilityDescription()));
         System.out.println("Facility " + getFacilityName() + " created with description: " + getFacilityDescription());
     }
 }

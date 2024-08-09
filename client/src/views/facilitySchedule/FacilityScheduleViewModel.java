@@ -16,16 +16,15 @@ import java.util.List;
 
 public class FacilityScheduleViewModel {
     private final SportFacilityModel model;
-    private final StringProperty selectedDate = new SimpleStringProperty();
+    private final ObjectProperty<LocalDate> selectedDate = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalTime> selectedHour = new SimpleObjectProperty<>();
     private final ListProperty<String> scheduleList = new SimpleListProperty<>(FXCollections.observableArrayList());
-
 
     public FacilityScheduleViewModel(SportFacilityModel model) {
         this.model = model;
     }
 
-    public StringProperty selectedDateProperty() {
+    public ObjectProperty<LocalDate> dateProperty() {
         return selectedDate;
     }
 
@@ -33,30 +32,32 @@ public class FacilityScheduleViewModel {
         return selectedHour;
     }
 
-    public ObservableList<String> getScheduleList() {
+    public ListProperty<String> scheduleListProperty() {
         return scheduleList;
     }
 
     public void loadSchedule(LocalDate date) {
         scheduleList.clear();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        // Mock data for now, assuming all slots are free except one hardcoded example
-        List<Schedule> schedules = List.of(
-                new Schedule(date.atTime(10, 0), date.atTime(11, 0), new User("reservedUser", "password", false), 1)
-        );
+
+        List<Schedule> schedules = model.getSchedulesForDate(date);
         for (int hour = 6; hour < 23; hour++) {
             LocalTime startTime = LocalTime.of(hour, 0);
             LocalTime endTime = startTime.plusHours(1);
-            String status = schedules.stream().anyMatch(s -> s.getStartTime().equals(startTime)) ? "RESERVED" : "FREE";
+            String status = schedules.stream().anyMatch(s -> s.getStartTime().toLocalTime().equals(startTime)) ? "RESERVED" : "FREE";
             scheduleList.add(startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter) + " " + status);
         }
     }
 
     public void reserve() throws SQLException, IOException {
-        LocalDate date = LocalDate.parse(selectedDate.get());
+        LocalDate date = selectedDate.get();
         LocalTime startTime = selectedHour.get();
-        LocalTime endTime = startTime.plusHours(1); // Assuming fixed 1-hour slots
-        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), null, 1);
+        if (date == null || startTime == null) {
+            throw new IllegalStateException("Date or time not selected");
+        }
+
+        LocalTime endTime = startTime.plusHours(1);
+        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), null, 1); // 1 is a placeholder for the facility ID
         model.reserveFacility(schedule);
         loadSchedule(date); // Refresh the schedule list
     }

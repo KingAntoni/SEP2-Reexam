@@ -11,6 +11,7 @@ import java.rmi.registry.Registry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class RMIClient extends UnicastRemoteObject implements Client {
@@ -26,14 +27,8 @@ public class RMIClient extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public boolean createFacility(String title, String description) throws IOException, SQLException {
-        Facility facility = new Facility(title, description);
+    public boolean createFacility(Facility facility) throws IOException, SQLException {
         return server.createFacility(facility);
-    }
-
-    @Override
-    public List<Schedule> getAllSchedules() throws IOException, SQLException {
-        return server.getAllSchedules();
     }
 
     @Override
@@ -59,18 +54,12 @@ public class RMIClient extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public boolean logIn(User user) throws IOException, SQLException {
-        return server.login(user);
+    public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws IOException, SQLException {
+        return server.getSchedulesForDate(date, facilityId);
     }
 
-    public static void main(String[] args) {
-        try {
-            RMIClient client = new RMIClient();
-            Facility facility = new Facility("TestFacility", "This is a test description.");
-            boolean result = client.createFacility(facility.getTitle(), facility.getDescription());
-            System.out.println("Facility added: " + result);
-        } catch (NotBoundException | IOException | SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public boolean logIn(User user) throws IOException, SQLException {
+        return server.login(user);
     }
 }

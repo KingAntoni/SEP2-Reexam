@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="facilities" uuid="c6617da8-189d-4555-aa46-817dd15ee559">
+    <data-source source="LOCAL" name="facilities" uuid="d6718e70-6bcc-402b-9cd2-5dd8ce7dc24b">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\agore\OneDrive\Dokumenti\GitHub\SEP2-Reexam\src\database\facilities.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\Japiye\Desktop\Aqui\SEP2-Reexam\src\database\facilities.db</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+      </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

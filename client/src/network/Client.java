@@ -12,8 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface Client extends Remote {
-    boolean createFacility(String title, String description) throws IOException, SQLException;
-    List<Schedule> getAllSchedules() throws IOException, SQLException;
+    boolean createFacility(Facility facility) throws IOException, SQLException;
     boolean reserveFacility(Schedule schedule) throws IOException, SQLException;
     boolean logIn(User user) throws RemoteException, IOException, SQLException;
     boolean editFacility(Facility facility) throws IOException, SQLException;

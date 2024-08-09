@@ -7,8 +7,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import transferObjects.User;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import views.ViewController;
@@ -35,51 +33,42 @@ public class FacilityScheduleViewController implements ViewController {
 
     @Override
     public void init() {
-
-        try{
+        try {
             scheduleViewModel = ViewModelFactory.getInstance().getFacilityScheduleVM();
-        }
-        catch (IOException | NotBoundException | SQLException e) {
-        e.printStackTrace();
-        showAlert(AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
-        return;
+        } catch (IOException | NotBoundException | SQLException e) {
+            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
+            return;
         }
 
         datePicker.setDayCellFactory(getDayCellFactory());
         datePicker.setValue(LocalDate.now());
         loadInitialSchedule(LocalDate.now());
+
         datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             if (newDate != null) {
                 loadInitialSchedule(newDate);
             }
         });
-        datePicker.property().bindBidirectional(scheduleViewModel.da)
-        scheduleListView.property().bindBidirectional(scheduleViewModel.)
+
+        // Bind the DatePicker and ListView to the ViewModel
+        datePicker.valueProperty().bindBidirectional(scheduleViewModel.dateProperty());
+        scheduleListView.itemsProperty().bind(scheduleViewModel.scheduleListProperty());
     }
 
     private void loadInitialSchedule(LocalDate date) {
-        scheduleListView.getItems().clear();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        IntStream.range(6, 23).forEach(hour -> {
-            String timeSlot = String.format("%02d:00 - %02d:00 FREE", hour, hour + 1);
-            scheduleListView.getItems().add(timeSlot);
-        });
+        scheduleViewModel.loadSchedule(date);
     }
 
     private Callback<DatePicker, DateCell> getDayCellFactory() {
-        return new Callback<DatePicker, DateCell>() {
+        return datePicker -> new DateCell() {
             @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item.isBefore(LocalDate.now())) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #ffc0cb;");
-                        }
-                    }
-                };
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;");
+                }
             }
         };
     }
@@ -90,7 +79,7 @@ public class FacilityScheduleViewController implements ViewController {
             showAlert(AlertType.ERROR, "Form Error!", "Please select a date.");
             return;
         }
-        viewModel.reserve();
+        scheduleViewModel.reserve();
         showAlert(AlertType.INFORMATION, "Reservation Successful", "Your reservation has been made.");
         loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
     }
