@@ -1,6 +1,8 @@
 package core;
 
 import model.SportFacilityModel;
+import views.editFacility.EditFacilityViewModel;
+import views.facilityMenu.FacilityMenuViewModel;
 import views.addFacility.FacilityViewModel;
 import views.facilitySchedule.FacilityScheduleViewModel;
 import views.login.LoginViewModel;
@@ -15,13 +17,17 @@ public class ViewModelFactory {
     private FacilityViewModel createFacilityVM;
     private FacilityScheduleViewModel createFacilityScheduleVM;
     private LoginViewModel createLoginVM;
-
+    private FacilityMenuViewModel facilityMenuVM;
+    private EditFacilityViewModel editFacilityVM;
+    private SportFacilityModel sportFacilityModel;
 
     private ViewModelFactory() throws IOException, NotBoundException, SQLException {
-        SportFacilityModel model = ModelFactory.getInstance().getModel();
-        createFacilityVM = new FacilityViewModel(model);
-        createFacilityScheduleVM = new FacilityScheduleViewModel(model);
-        createLoginVM = new LoginViewModel(model);
+        sportFacilityModel = ModelFactory.getInstance().getModel();
+        createFacilityVM = new FacilityViewModel(sportFacilityModel);
+        facilityMenuVM = new FacilityMenuViewModel(sportFacilityModel);
+        editFacilityVM = new EditFacilityViewModel(sportFacilityModel);
+        createFacilityScheduleVM = new FacilityScheduleViewModel(sportFacilityModel);
+        createLoginVM = new LoginViewModel(sportFacilityModel);
     }
 
     public static synchronized ViewModelFactory getInstance() throws IOException, NotBoundException, SQLException {
@@ -39,8 +45,19 @@ public class ViewModelFactory {
         return createFacilityScheduleVM;
     }
 
+    public FacilityMenuViewModel getFacilityMenuVM() {
+        return facilityMenuVM;
+    }
+
+    public EditFacilityViewModel getEditFacilityVM() {
+        return editFacilityVM;
+    }
+
     public LoginViewModel getLoginVM() {
         return createLoginVM;
     }
 
+    public SportFacilityModel getSportFacilityModel() {
+        return sportFacilityModel;
+    }
 }

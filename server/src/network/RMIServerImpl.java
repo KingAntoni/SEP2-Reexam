@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,17 +43,17 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
-            pstmt.setBoolean(3, user.isAdmin()); // Assuming User class has an isAdmin() method
+            pstmt.setBoolean(3, user.isAdmin());
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return true; // User found with matching credentials and admin status
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // User not found or incorrect admin status
+        return false;
     }
 
     @Override
@@ -94,25 +95,89 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
         }
     }
 
-    private List<Schedule> fetchAllSchedulesFromDatabase() {
-        List<Schedule> schedules = new ArrayList<>();
-        String query = "SELECT s.id, s.startTime, s.endTime, u.username, f.title " +
-                "FROM Schedule s " +
-                "JOIN User u ON s.userId = u.id " +
-                "JOIN Facility f ON s.facilityId = f.id";
+    @Override
+    public boolean editFacility(Facility facility) throws RemoteException, IOException, SQLException {
+        String updateFacilitySQL = "UPDATE Facility SET title = ?, description = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateFacilitySQL)) {
+            pstmt.setString(1, facility.getTitle());
+            pstmt.setString(2, facility.getDescription());
+            pstmt.setInt(3, facility.getId());
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteFacility(Facility facility) throws RemoteException, IOException, SQLException {
+        String deleteFacilitySQL = "DELETE FROM Facility WHERE id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(deleteFacilitySQL)) {
+            pstmt.setInt(1, facility.getId());
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Facility> readAllFacilities() throws RemoteException, IOException, SQLException {
+        List<Facility> facilities = new ArrayList<>();
+        String query = "SELECT * FROM Facility";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                Schedule schedule = new Schedule(
-                        LocalDateTime.parse(rs.getString("startTime")),
-                        LocalDateTime.parse(rs.getString("endTime")),
-                        new User(rs.getString("username"), "",true), // password not needed here
-                        rs.getInt("facilityId")
-                );
-                schedules.add(schedule);
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                Facility facility = new Facility(id, title, description);
+                facilities.add(facility);
+                System.out.println("Server retrieved facility: " + facility);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return facilities;
+    }
+
+    @Override
+    public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws RemoteException, IOException, SQLException {
+        List<Schedule> schedules = new ArrayList<>();
+        String query = "SELECT s.id, s.startTime, s.endTime, u.username, f.title " +
+                "FROM Schedule s " +
+                "JOIN User u ON s.userId = u.id " +
+                "JOIN Facility f ON s.facilityId = f.id " +
+                "WHERE s.facilityId = ? AND DATE(s.startTime) = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, facilityId);
+            pstmt.setDate(2, java.sql.Date.valueOf(date));
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Schedule schedule = new Schedule(
+                            LocalDateTime.parse(rs.getString("startTime")),
+                            LocalDateTime.parse(rs.getString("endTime")),
+                            new User(rs.getString("username"), "", true),
+                            facilityId
+                    );
+                    schedules.add(schedule);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,7 +224,6 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
 
     public static void main(String[] args) {
         try {
-            // Create and export a registry instance on port 1099
             Registry registry = LocateRegistry.createRegistry(1099);
 
             RMIServerImpl server = new RMIServerImpl();

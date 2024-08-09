@@ -4,10 +4,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import transferObjects.Facility;
 import views.ViewController;
-import views.login.LoginViewController;
-import views.login.LoginViewModel;
-import views.facilitySchedule.FacilityScheduleViewModel;
+import views.editFacility.EditFacilityViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,6 +18,7 @@ public class ViewHandler {
     private Scene createFacilityScene;
     private Scene scheduleScene;
     private Scene loginScene;
+    private Scene editFacilityScene;
     private static ViewHandler instance;
 
     private ViewHandler() {}
@@ -32,70 +32,66 @@ public class ViewHandler {
 
     public void start(Stage primaryStage) throws IOException, SQLException, NotBoundException {
         this.stage = primaryStage;
-        System.out.println("Starting application...");
-        openLoginView();
-        //openCreateFacility();
+        openFacilityMenu();
+    }
+
+    public void openFacilityMenu() {
+        try {
+            Parent root = loadFXML("/views/facilityMenu/FacilityMenuView.fxml");
+            stage.setScene(new Scene(root));
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        stage.setTitle("Facility Menu");
+        stage.show();
     }
 
     public void openCreateFacility() {
         try {
-            System.out.println("Opening Create Facility view...");
             Parent root = loadFXML("/views/addFacility/FacilityView.fxml");
-            createFacilityScene = new Scene(root);
-        } catch (IOException | NotBoundException | SQLException e) {
+            stage.setScene(new Scene(root));
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-
         stage.setTitle("Create Facility");
-        stage.setScene(createFacilityScene);
         stage.show();
-        System.out.println("Create Facility view opened.");
     }
 
-    public void openFacilitySchedule(){
+    public void openFacilitySchedule() {
         try {
-            System.out.println("Opening Facility Schedule view...");
             Parent root = loadFXML("/views/facilitySchedule/FacilityScheduleView.fxml");
-            scheduleScene = new Scene(root);
-        } catch (IOException | NotBoundException | SQLException e) {
+            stage.setScene(new Scene(root));
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-
         stage.setTitle("Schedule");
-        stage.setScene(scheduleScene);
         stage.show();
-        System.out.println("Schedule Scene view opened.");
     }
 
-    public void openLoginView() {
+    public void openEditFacility(Facility facility) throws IOException, NotBoundException, SQLException {
         try {
-            System.out.println("Opening Login view...");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login/LoginView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/editFacility/EditFacilityView.fxml"));
             Parent root = loader.load();
 
-            LoginViewController ctrl = loader.getController();
-            ctrl.init();
+            EditFacilityViewController controller = loader.getController();
+            controller.init(ViewModelFactory.getInstance(), this, facility);
 
-            loginScene = new Scene(root);
+            stage.setScene(new Scene(root));
+            stage.setTitle("Edit Facility");
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            throw e;
         }
-
-        stage.setTitle("Log in");
-        stage.setScene(loginScene);
-        stage.show();
-        System.out.println("Log in view opened.");
     }
 
-    private Parent loadFXML(String path) throws IOException, NotBoundException, SQLException {
-        FXMLLoader loader = new FXMLLoader();
-        System.out.println("Loading FXML from path: " + path);
-        loader.setLocation(getClass().getResource(path));
+    private Parent loadFXML(String path) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
         Parent root = loader.load();
-        System.out.println("FXML loaded.");
 
         ViewController ctrl = loader.getController();
         ctrl.init();
+
         return root;
     }
 }
