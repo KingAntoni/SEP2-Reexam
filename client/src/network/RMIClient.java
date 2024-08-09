@@ -37,6 +37,12 @@ public class RMIClient extends UnicastRemoteObject implements Client {
     }
 
     @Override
+    public boolean cancelReserveFacility(Schedule schedule) throws IOException, SQLException {
+        return server.cancelReserveFacility(schedule);
+
+    }
+
+    @Override
     public boolean editFacility(Facility facility) throws IOException, SQLException {
         return server.editFacility(facility);
     }

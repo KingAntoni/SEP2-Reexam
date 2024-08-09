@@ -27,7 +27,7 @@ public class SportFacilityModelManager implements SportFacilityModel {
     @Override
     public boolean reserveFacility(Schedule schedule) throws IOException, SQLException {
         try {
-            if(!schedule.getUser().equals(user)) {
+            if(schedule.getUser().getUsername().equals(null)) {
                 schedule.setUser(user);
             }
             return client.reserveFacility(schedule);
@@ -35,6 +35,14 @@ public class SportFacilityModelManager implements SportFacilityModel {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean cancelReserveFacility(Schedule schedule) throws IOException, SQLException {
+        if(schedule.getUser().getUsername().equals(null)) {
+            schedule.setUser(user);
+        }
+        return client.cancelReserveFacility(schedule);
     }
 
     @Override

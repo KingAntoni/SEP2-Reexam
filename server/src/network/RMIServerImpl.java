@@ -65,6 +65,11 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
         return true;
     }
 
+    @Override
+    public boolean cancelReserveFacility(Schedule schedule) throws IOException, SQLException {
+        return true;
+    }
+
     private boolean storeFacilityInDatabase(Facility facility) {
         String insertFacilitySQL = "INSERT INTO Facility (title, description) VALUES (?, ?)";
 
@@ -150,11 +155,6 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
             e.printStackTrace();
         }
         return facilities;
-    }
-
-    @Override
-    public void addSchedule(Schedule schedule) throws RemoteException, IOException, SQLException {
-
     }
 
     @Override
