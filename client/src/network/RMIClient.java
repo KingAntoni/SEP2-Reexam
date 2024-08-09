@@ -31,13 +31,12 @@ public class RMIClient extends UnicastRemoteObject implements Client {
     }
 
     @Override
-    public boolean createFacility(String title, String description) throws IOException, SQLException {
-        Facility facility = new Facility(title, description);
+    public boolean createFacility(Facility facility) throws IOException, SQLException {
         return server.createFacility(facility);
     }
 
     @Override
-    public boolean login(User user) throws IOException, SQLException {
+    public boolean logIn(User user) throws IOException, SQLException {
         return server.login(user);
     }
 

@@ -16,9 +16,12 @@ public class ViewModelFactory {
     private FacilityScheduleViewModel createFacilityScheduleVM;
     private LoginViewModel createLoginVM;
 
+
     private ViewModelFactory() throws IOException, NotBoundException, SQLException {
         SportFacilityModel model = ModelFactory.getInstance().getModel();
         createFacilityVM = new FacilityViewModel(model);
+        createFacilityScheduleVM = new FacilityScheduleViewModel(model);
+        createLoginVM = new LoginViewModel(model);
     }
 
     public static synchronized ViewModelFactory getInstance() throws IOException, NotBoundException, SQLException {

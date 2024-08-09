@@ -37,20 +37,22 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
     }
 
     private boolean checkUserCredentials(User user) {
-        String query = "SELECT * FROM User WHERE username = ? AND password = ?";
+        String query = "SELECT * FROM User WHERE username = ? AND password = ? AND admin = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
+            pstmt.setBoolean(3, user.isAdmin()); // Assuming User class has an isAdmin() method
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return true; // User found
+                    return true; // User found with matching credentials and admin status
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // User not found
+        return false; // User not found or incorrect admin status
     }
 
     @Override

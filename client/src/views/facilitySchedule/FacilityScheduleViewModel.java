@@ -16,17 +16,13 @@ import java.util.List;
 
 public class FacilityScheduleViewModel {
     private final SportFacilityModel model;
-    private final StringProperty selectedDate;
-    private final ObjectProperty<LocalTime> selectedHour;
-    private final ObservableList<String> scheduleList;
-    private int facilityId; // Add facilityId to track current facility
+    private final StringProperty selectedDate = new SimpleStringProperty();
+    private final ObjectProperty<LocalTime> selectedHour = new SimpleObjectProperty<>();
+    private final ListProperty<String> scheduleList = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private int facilityId;
 
-    public FacilityScheduleViewModel(SportFacilityModel model, int facilityId) {
+    public FacilityScheduleViewModel(SportFacilityModel model) {
         this.model = model;
-        this.selectedDate = new SimpleStringProperty();
-        this.selectedHour = new SimpleObjectProperty<>();
-        this.scheduleList = FXCollections.observableArrayList();
-        this.facilityId = facilityId;
     }
 
     public StringProperty selectedDateProperty() {
@@ -56,11 +52,11 @@ public class FacilityScheduleViewModel {
         }
     }
 
-    public void reserve(User user) throws SQLException, IOException {
+    public void reserve() throws SQLException, IOException {
         LocalDate date = LocalDate.parse(selectedDate.get());
         LocalTime startTime = selectedHour.get();
         LocalTime endTime = startTime.plusHours(1); // Assuming fixed 1-hour slots
-        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), user, facilityId);
+        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), null, facilityId);
         model.reserveFacility(schedule);
         loadSchedule(date); // Refresh the schedule list
     }

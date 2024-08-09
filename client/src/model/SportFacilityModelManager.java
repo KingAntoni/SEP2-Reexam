@@ -11,6 +11,7 @@ import java.util.List;
 
 public class SportFacilityModelManager implements SportFacilityModel {
     private final Client client;
+    private User user = new User(null,null,false);
 
     public SportFacilityModelManager(Client client) {
         this.client = client;
@@ -18,7 +19,7 @@ public class SportFacilityModelManager implements SportFacilityModel {
 
     @Override
     public boolean createFacility(String title, String description) throws IOException, SQLException {
-        return client.createFacility(title, description);
+        return client.createFacility(new Facility(title, description));
     }
 
     @Override
@@ -34,6 +35,7 @@ public class SportFacilityModelManager implements SportFacilityModel {
     @Override
     public void reserveFacility(Schedule schedule) throws IOException, SQLException {
         try {
+            schedule.setUser(user);
             client.reserveFacility(schedule);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -41,9 +43,12 @@ public class SportFacilityModelManager implements SportFacilityModel {
     }
 
     @Override
-    public boolean logIn(String username, String password) throws IOException, SQLException {
+    public boolean logIn(String username, String password, boolean admin) throws IOException, SQLException {
         try {
-            return client.login(new User(username, password));
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setAdmin(admin);
+            return client.logIn(new User(username, password, admin));
         } catch (IOException | SQLException e) {
             e.printStackTrace();
             return false;

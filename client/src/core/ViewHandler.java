@@ -73,7 +73,6 @@ public class ViewHandler {
             Parent root = loader.load();
 
             LoginViewController ctrl = loader.getController();
-            LoginViewModel viewModel = new LoginViewModel();
             ctrl.init();
 
             loginScene = new Scene(root);

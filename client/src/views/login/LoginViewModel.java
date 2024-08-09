@@ -1,52 +1,40 @@
 package views.login;
 
-import core.ViewHandler;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import model.SportFacilityModel;
 import network.Client;
 import transferObjects.User;
 import java.io.IOException;
-import java.rmi.NotBoundException;
-import java.sql.SQLException;
-
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.sql.SQLException;
 
 public class LoginViewModel {
-    private final StringProperty username;
-    private final StringProperty password;
-    private StringProperty errorLabel;
-    private Client client;
-    private ViewHandler viewHandler;
-    private SportFacilityModel sportFacilityModel;
+    private final StringProperty username = new SimpleStringProperty();
+    private final StringProperty password =  new SimpleStringProperty();
+    private final StringProperty errorLabel = new SimpleStringProperty();
+    private final BooleanProperty admin = new SimpleBooleanProperty();
+    private final SportFacilityModel model;
 
-    public LoginViewModel() {
-        this.username = new SimpleStringProperty();
-        this.password = new SimpleStringProperty();
-
-        try {
-            Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-            client = (Client) registry.lookup("Server");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public LoginViewModel(SportFacilityModel model) {
+        this.model = model;
     }
 
-    public void logIn() throws IOException, SQLException {
-        if(username.getValue()==null|| password.getValue()==null)
-        {
+    public boolean logIn() throws IOException, SQLException {
+        if (username.getValue() == null || password.getValue() == null) {
             errorLabel.setValue("Type in your username and password");
-        }
-        else if(!sportFacilityModel.logIn(username.getValue(), password.getValue()))
-        {
+            return false;
+        } else if (!model.logIn(username.getValue(), password.getValue(), admin.getValue())) {
             errorLabel.setValue("Wrong password or username");
-        }
-        else
-        {
-            viewHandler.openFacilitySchedule();
+            return false;
+        } else {
+            return true; // Login successful
         }
     }
+
 
     public StringProperty usernameProperty() {
         return username;
@@ -56,13 +44,11 @@ public class LoginViewModel {
         return password;
     }
 
-    public boolean validateCredentials(String username, String password, boolean isAdmin) {
-        try {
-            User user = new User(username, password, isAdmin);
-            return client.login(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public BooleanProperty adminProperty() {
+        return admin;
+    }
+
+    public StringProperty errorLabelProperty() {
+        return errorLabel;
     }
 }

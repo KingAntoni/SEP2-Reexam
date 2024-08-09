@@ -84,9 +84,7 @@ public class FacilityScheduleViewController implements ViewController {
             showAlert(AlertType.ERROR, "Form Error!", "Please select a date.");
             return;
         }
-        // Assuming a logged-in user is available
-        User user = new User("currentUsername", "password", false); // Replace with actual user
-        viewModel.reserve(user);
+        viewModel.reserve();
         showAlert(AlertType.INFORMATION, "Reservation Successful", "Your reservation has been made.");
         loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
     }
