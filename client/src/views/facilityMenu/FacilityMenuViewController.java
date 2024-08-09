@@ -1,4 +1,4 @@
-package views.Menu;
+package views.facilityMenu;
 
 import core.ViewHandler;
 import core.ViewModelFactory;
@@ -10,9 +10,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import transferObjects.Facility;
 import views.ViewController;
-import views.facilityMenu.FacilityMenuViewModel;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.sql.SQLException;
 
 public class FacilityMenuViewController implements ViewController {
@@ -31,13 +31,8 @@ public class FacilityMenuViewController implements ViewController {
 
     @Override
     public void init() {
-        // This method will be called by the FXMLLoader
-    }
-
-
-    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler) {
         try {
-            facilityMenuViewModel = viewModelFactory.getFacilityMenuVM();
+            facilityMenuViewModel = ViewModelFactory.getInstance().getFacilityMenuVM();
             bindTableColumns();
             facilityTableView.setItems(facilityMenuViewModel.getFacilities());
         } catch (Exception e) {
@@ -53,20 +48,16 @@ public class FacilityMenuViewController implements ViewController {
 
     @FXML
     public void addFacilityButton(ActionEvent actionEvent) {
-        // Code to open the add facility view
-        ViewHandler.getInstance().openCreateFacility();
+        viewHandler.getInstance().openCreateFacility();
     }
-
 
     @FXML
-    public void editFacilityButton(ActionEvent actionEvent) {
+    public void editFacilityButton(ActionEvent actionEvent) throws IOException, NotBoundException, SQLException {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
         if (selectedFacility != null) {
-            // Implement the openEditFacility method in ViewHandler
-            // viewHandler.openEditFacility(selectedFacility);
+            viewHandler.getInstance().openEditFacility(selectedFacility);
         }
     }
-
     @FXML
     public void deleteFacilityButton(ActionEvent actionEvent) {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
@@ -84,15 +75,13 @@ public class FacilityMenuViewController implements ViewController {
     public void reserveFacilityButton(ActionEvent actionEvent) {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
         if (selectedFacility != null) {
-            // Implement the openReserveFacility method in ViewHandler
-            // viewHandler.openReserveFacility(selectedFacility);
+            // Add your implementation for reserving the facility
         }
     }
 
     @FXML
     public void logOutButtonPressed(ActionEvent actionEvent) {
-        // Implement the openLogOut method in ViewHandler
-        // viewHandler.openLogOut();
+        // Add your implementation for logout
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

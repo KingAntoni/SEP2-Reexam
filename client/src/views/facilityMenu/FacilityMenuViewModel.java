@@ -5,9 +5,6 @@ import javafx.collections.ObservableList;
 import model.SportFacilityModel;
 import transferObjects.Facility;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public class FacilityMenuViewModel {
 
     private final SportFacilityModel model;
@@ -15,7 +12,7 @@ public class FacilityMenuViewModel {
 
     public FacilityMenuViewModel(SportFacilityModel model) {
         this.model = model;
-        facilities = FXCollections.observableArrayList();
+        this.facilities = FXCollections.observableArrayList();
         loadFacilities();
     }
 
@@ -23,19 +20,21 @@ public class FacilityMenuViewModel {
         return facilities;
     }
 
-    private void loadFacilities() {
+    public void loadFacilities() {
+        facilities.clear();
         try {
-            facilities.setAll(model.getAllFacilities());
-            facilities.forEach(facility -> System.out.println("Loaded facility: " + facility.getTitle())); // Add this line
-        } catch (IOException | SQLException e) {
+            facilities.addAll(model.getAllFacilities());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    public void deleteFacility(Facility facility) throws IOException, SQLException {
-        if (model.deleteFacility(facility)) {
-            facilities.remove(facility);
+    public void deleteFacility(Facility facility) {
+        try {
+            model.deleteFacility(facility);
+            loadFacilities();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

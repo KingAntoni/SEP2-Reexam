@@ -1,6 +1,7 @@
 package core;
 
 import model.SportFacilityModel;
+import views.editFacility.EditFacilityViewModel;
 import views.facilityMenu.FacilityMenuViewModel;
 import views.addFacility.FacilityViewModel;
 
@@ -13,12 +14,14 @@ public class ViewModelFactory {
 
     private FacilityViewModel createFacilityVM;
     private FacilityMenuViewModel facilityMenuVM;
+    private EditFacilityViewModel editFacilityVM;
     private SportFacilityModel sportFacilityModel;
 
     private ViewModelFactory() throws IOException, NotBoundException, SQLException {
         sportFacilityModel = ModelFactory.getInstance().getModel();
         createFacilityVM = new FacilityViewModel(sportFacilityModel);
         facilityMenuVM = new FacilityMenuViewModel(sportFacilityModel);
+        editFacilityVM = new EditFacilityViewModel(sportFacilityModel);
     }
 
     public static synchronized ViewModelFactory getInstance() throws IOException, NotBoundException, SQLException {
@@ -34,6 +37,10 @@ public class ViewModelFactory {
 
     public FacilityMenuViewModel getFacilityMenuVM() {
         return facilityMenuVM;
+    }
+
+    public EditFacilityViewModel getEditFacilityVM() {
+        return editFacilityVM;
     }
 
     public SportFacilityModel getSportFacilityModel() {

@@ -60,3 +60,4 @@ public class Facility implements Serializable {
         return "Facility [id=" + id + ", title=" + title + ", description=" + description + ", schedules=" + schedules + "]";
     }
 }
+
