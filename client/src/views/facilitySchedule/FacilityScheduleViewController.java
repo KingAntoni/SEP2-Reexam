@@ -1,5 +1,6 @@
 package views.facilitySchedule;
 
+import core.ViewModelFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -13,6 +14,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import views.ViewController;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,7 +24,7 @@ import javafx.util.Callback;
 import javafx.scene.control.DateCell;
 
 public class FacilityScheduleViewController implements ViewController {
-    private FacilityScheduleViewModel viewModel;
+    private FacilityScheduleViewModel scheduleViewModel;
     private final ObjectProperty<LocalTime> selectedHour = new SimpleObjectProperty<>();
 
     @FXML
@@ -33,22 +35,26 @@ public class FacilityScheduleViewController implements ViewController {
 
     @Override
     public void init() {
-        // You can initialize the controller without ViewModel for initial setup if needed
-        // Disable past dates
+
+        try{
+            scheduleViewModel = ViewModelFactory.getInstance().getFacilityScheduleVM();
+        }
+        catch (IOException | NotBoundException | SQLException e) {
+        e.printStackTrace();
+        showAlert(AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
+        return;
+        }
+
         datePicker.setDayCellFactory(getDayCellFactory());
-
-        // Set current date as default
         datePicker.setValue(LocalDate.now());
-
-        // Load initial schedule for today
         loadInitialSchedule(LocalDate.now());
-
-        // Set up date change listener
         datePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
             if (newDate != null) {
                 loadInitialSchedule(newDate);
             }
         });
+        datePicker.property().bindBidirectional(scheduleViewModel.da)
+        scheduleListView.property().bindBidirectional(scheduleViewModel.)
     }
 
     private void loadInitialSchedule(LocalDate date) {

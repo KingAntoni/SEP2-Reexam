@@ -34,6 +34,7 @@ public class ViewHandler {
         this.stage = primaryStage;
         System.out.println("Starting application...");
         openLoginView();
+        //openCreateFacility();
     }
 
     public void openCreateFacility() {
