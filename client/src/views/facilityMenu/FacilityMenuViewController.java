@@ -64,12 +64,18 @@ public class FacilityMenuViewController implements ViewController {
         if (selectedFacility != null) {
             try {
                 facilityMenuViewModel.deleteFacility(selectedFacility);
+                // Refresh the TableView data
+                facilityTableView.setItems(facilityMenuViewModel.getFacilities());
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Deletion Error", "Error deleting facility: " + e.getMessage());
             }
+        } else {
+            // Show a warning if no facility is selected
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a facility to delete.");
         }
     }
+
 
     @FXML
     public void reserveFacilityButton(ActionEvent actionEvent) {
