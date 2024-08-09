@@ -25,20 +25,12 @@ public class FacilityViewModel {
         return facilityName.get();
     }
 
-    public void setFacilityName(String facilityName) {
-        this.facilityName.set(facilityName);
-    }
-
     public StringProperty facilityDescriptionProperty() {
         return facilityDescription;
     }
 
     public String getFacilityDescription() {
         return facilityDescription.get();
-    }
-
-    public void setFacilityDescription(String facilityDescription) {
-        this.facilityDescription.set(facilityDescription);
     }
 
     public void createFacility() throws IOException, SQLException {

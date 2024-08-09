@@ -1,5 +1,6 @@
 package views.addFacility;
 
+import core.ViewHandler;
 import core.ViewModelFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -21,6 +22,8 @@ public class FacilityViewController implements ViewController {
     @FXML
     private TextField facilityDescriptionField;
 
+    private ViewHandler viewHandler;
+
     @FXML
     @Override
     public void init() {
@@ -35,6 +38,11 @@ public class FacilityViewController implements ViewController {
         facilityDescriptionField.textProperty().bindBidirectional(facilityViewModel.facilityDescriptionProperty());
     }
 
+    public void init(ViewHandler viewHandler){
+        this.viewHandler = viewHandler;
+    }
+
+
     @FXML
     private void createFacility() {
         try {
@@ -43,7 +51,7 @@ public class FacilityViewController implements ViewController {
                 return;
             }
             facilityViewModel.createFacility();
-            showAlert(AlertType.INFORMATION, "Facility Created!", "Facility " + facilityViewModel.getFacilityName() + " has been created with description: " + facilityViewModel.getFacilityDescription());
+            viewHandler.openFacilityMenu();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
             showAlert(AlertType.ERROR, "Creation Error", "Error creating facility: " + e.getMessage());

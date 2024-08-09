@@ -4,7 +4,9 @@ import model.SportFacilityModel;
 import views.editFacility.EditFacilityViewModel;
 import views.facilityMenu.FacilityMenuViewModel;
 import views.addFacility.FacilityViewModel;
+import views.facilityMenuUser.FacilityMenuUserViewModel;
 import views.facilitySchedule.FacilityScheduleViewModel;
+import views.facilityScheduleAdmin.FacilityScheduleAdminViewModel;
 import views.login.LoginViewModel;
 
 import java.io.IOException;
@@ -19,7 +21,10 @@ public class ViewModelFactory {
     private LoginViewModel createLoginVM;
     private FacilityMenuViewModel facilityMenuVM;
     private EditFacilityViewModel editFacilityVM;
+    private FacilityMenuUserViewModel facilityMenuUserVM;
+    private FacilityScheduleAdminViewModel createFacilityScheduleAdminVM;
     private SportFacilityModel sportFacilityModel;
+
 
     private ViewModelFactory() throws IOException, NotBoundException, SQLException {
         sportFacilityModel = ModelFactory.getInstance().getModel();
@@ -55,6 +60,14 @@ public class ViewModelFactory {
 
     public LoginViewModel getLoginVM() {
         return createLoginVM;
+    }
+
+    public FacilityMenuUserViewModel getFacilityMenuUserVM() {
+        return facilityMenuUserVM;
+    }
+
+    public FacilityScheduleAdminViewModel getFacilityScheduleAdminVM() {
+        return createFacilityScheduleAdminVM;
     }
 
     public SportFacilityModel getSportFacilityModel() {
