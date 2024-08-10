@@ -16,6 +16,10 @@ public class FacilityMenuViewModel {
         loadFacilities();
     }
 
+    public void setFacilityId(int facilityId) {
+        model.setFacilityId(facilityId);
+    }
+
     public ObservableList<Facility> getFacilities() {
         return facilities;
     }

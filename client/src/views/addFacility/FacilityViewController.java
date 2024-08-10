@@ -38,7 +38,7 @@ public class FacilityViewController implements ViewController {
         facilityDescriptionField.textProperty().bindBidirectional(facilityViewModel.facilityDescriptionProperty());
     }
 
-    public void init(ViewHandler viewHandler){
+    public void init(ViewModelFactory instance, ViewHandler viewHandler) {
         this.viewHandler = viewHandler;
     }
 
@@ -58,6 +58,11 @@ public class FacilityViewController implements ViewController {
         }
     }
 
+    @FXML
+    public void backButtonPressed() {
+        viewHandler.openFacilityMenu();
+    }
+
     private void showAlert(AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -65,4 +70,6 @@ public class FacilityViewController implements ViewController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
 }

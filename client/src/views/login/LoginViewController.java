@@ -51,7 +51,12 @@ public class LoginViewController implements ViewController {
         boolean success = loginViewModel.logIn();
         if (success) {
             // Close the login view and open the facility schedule view
-            ViewHandler.getInstance().openFacilitySchedule();
+            if(!adminCheckBox.isSelected()) {
+                ViewHandler.getInstance().openFacilityMenuUser();
+            }
+            else {
+                ViewHandler.getInstance().openFacilityMenu();
+            }
         } else {
             // Optionally, show an error alert if needed (handled by errorLabel in the UI)
             showAlert(AlertType.ERROR, "Login Failed", "Incorrect username, password, or admin status.");

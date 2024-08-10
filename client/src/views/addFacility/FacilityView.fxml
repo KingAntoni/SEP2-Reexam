@@ -19,4 +19,5 @@
 
     <Label text="Facility Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
     <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+    <Button onAction="#backButtonPressed" text="Back" GridPane.rowIndex="2" />
 </GridPane>

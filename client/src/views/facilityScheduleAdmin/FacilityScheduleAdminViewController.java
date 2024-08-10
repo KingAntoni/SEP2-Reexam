@@ -4,11 +4,8 @@ import core.ViewModelFactory;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import views.ViewController;
 
@@ -27,6 +24,9 @@ public class FacilityScheduleAdminViewController implements ViewController {
 
     @FXML
     private ListView<String> scheduleListView;
+
+    @FXML
+    private ComboBox<String> facilityComboBox;
 
     @Override
     public void init() {

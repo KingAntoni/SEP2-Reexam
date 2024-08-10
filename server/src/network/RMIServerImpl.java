@@ -180,7 +180,6 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
         return schedules;
     }
 
-
     private void storeScheduleInDatabase(Schedule schedule) {
         String insertUserSQL = "INSERT INTO User (username, password) VALUES (?, ?)";
         String insertScheduleSQL = "INSERT INTO Schedule (startTime, endTime, userId, facilityId) VALUES (?, ?, ?, ?)";

@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import transferObjects.Facility;
 import views.ViewController;
 import views.editFacility.EditFacilityViewController;
+import views.addFacility.FacilityViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,7 +33,6 @@ public class ViewHandler {
 
     public void start(Stage primaryStage) throws IOException, SQLException, NotBoundException {
         this.stage = primaryStage;
-        openFacilityMenu();
     }
 
     public void openFacilityMenu() {
@@ -42,16 +42,32 @@ public class ViewHandler {
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        stage.setTitle("Facility Menu");
+        stage.setTitle("Admin Facility Menu");
+        stage.show();
+    }
+
+    public void openFacilityMenuUser() {
+        try {
+            Parent root = loadFXML("/views/facilityMenu/FacilityMenuUserView.fxml");
+            stage.setScene(new Scene(root));
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        stage.setTitle("User Facility Menu");
         stage.show();
     }
 
     public void openCreateFacility() {
         try {
-            Parent root = loadFXML("/views/addFacility/FacilityView.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addFacility/FacilityView.fxml"));
+            Parent root = loader.load();
+            FacilityViewController controller = loader.getController();
+            controller.init(ViewModelFactory.getInstance(), this);
             stage.setScene(new Scene(root));
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
         }
         stage.setTitle("Create Facility");
         stage.show();
@@ -65,6 +81,17 @@ public class ViewHandler {
             e.printStackTrace();
         }
         stage.setTitle("Schedule");
+        stage.show();
+    }
+
+    public void openFacilityScheduleAdmin(){
+        try {
+            Parent root = loadFXML("/views/facilityScheduleAdmin/FacilityScheduleAdminView.fxml");
+            stage.setScene(new Scene(root));
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        stage.setTitle("Schedule Admin");
         stage.show();
     }
 
@@ -84,6 +111,19 @@ public class ViewHandler {
             throw e;
         }
     }
+
+    public void openLogin(){
+        try {
+            Parent root = loadFXML("/views/login/LoginView.fxml");
+            stage.setScene(new Scene(root));
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        stage.setTitle("Log in");
+        stage.show();
+    }
+
+
 
     private Parent loadFXML(String path) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));

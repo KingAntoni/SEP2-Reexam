@@ -19,6 +19,10 @@ public class SportFacilityModelManager implements SportFacilityModel {
         this.client = client;
     }
 
+    public void setFacilityId(int facilityId) {
+        this.facilityId = facilityId;
+    }
+
     @Override
     public boolean createFacility(Facility facility) throws IOException, SQLException {
         return client.createFacility(facility);

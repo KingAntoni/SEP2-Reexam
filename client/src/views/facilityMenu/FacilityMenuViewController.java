@@ -82,6 +82,7 @@ public class FacilityMenuViewController implements ViewController {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
         if (selectedFacility != null) {
             // Add your implementation for reserving the facility
+            facilityMenuViewModel.setFacilityId(selectedFacility.getId());
         }
     }
 

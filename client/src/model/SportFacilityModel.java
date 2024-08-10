@@ -17,4 +17,5 @@ public interface SportFacilityModel {
     boolean deleteFacility(Facility facility) throws IOException, SQLException;
     List<Facility> getAllFacilities() throws IOException, SQLException;
     List<Schedule> getSchedulesForDate(LocalDate date);
+    void setFacilityId(int facilityId);
 }
