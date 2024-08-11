@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
+          fx:controller="views.facilityScheduleAdmin.FacilityScheduleAdminViewController"
+          hgap="10" vgap="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <Label text="Select User:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+    <ComboBox fx:id="userComboBox" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+    <Label text="Select Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+    <DatePicker fx:id="datePicker" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    <Label text="Schedule:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    <ListView fx:id="scheduleListView" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+
+    <Button text="Reserve" onAction="#reserve" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+
+</GridPane>
