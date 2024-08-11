@@ -9,6 +9,9 @@ import views.ViewController;
 import views.editFacility.EditFacilityViewController;
 import views.addFacility.FacilityViewController;
 import views.facilityMenu.FacilityMenuViewController;
+import views.facilityMenuUser.FacilityMenuUserViewController;
+import views.facilitySchedule.FacilityScheduleViewController;
+import views.facilityScheduleAdmin.FacilityScheduleAdminViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -57,6 +60,8 @@ public class ViewHandler {
         try {
             Parent root = loadFXML("/views/facilityMenu/FacilityMenuUserView.fxml");
             stage.setScene(new Scene(root));
+            FacilityMenuUserViewController facilityMenuUserViewController = new FacilityMenuUserViewController();
+            facilityMenuUserViewController.init();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -97,23 +102,41 @@ public class ViewHandler {
         }
     }
 
-    public void openFacilitySchedule() {
+    public void openFacilitySchedule(Facility facility) {
         try {
-            Parent root = loadFXML("/views/facilitySchedule/FacilityScheduleView.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilitySchedule/FacilityScheduleView.fxml"));
+            Parent root = loader.load();
+            FacilityScheduleViewController controller = loader.getController();
+            controller.init(ViewModelFactory.getInstance(), this, facility);
             stage.setScene(new Scene(root));
-        } catch (IOException | SQLException e) {
+            stage.setTitle("Schedule");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
         }
         stage.setTitle("Schedule");
         stage.show();
     }
 
-    public void openFacilityScheduleAdmin(){
+    public void openFacilityScheduleAdmin(Facility facility){
         try {
-            Parent root = loadFXML("/views/facilityScheduleAdmin/FacilityScheduleAdminView.fxml");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilityScheduleAdmin/FacilityScheduleAdminView.fxml"));
+            Parent root = loader.load();
+            FacilityScheduleAdminViewController controller = loader.getController();
+            controller.init(ViewModelFactory.getInstance(), this, facility);
             stage.setScene(new Scene(root));
-        } catch (IOException | SQLException e) {
+            stage.setTitle("Schedule Admin");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
         }
         stage.setTitle("Schedule Admin");
         stage.show();

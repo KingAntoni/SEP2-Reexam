@@ -1,5 +1,6 @@
 package views.facilityScheduleAdmin;
 
+import core.ViewHandler;
 import core.ViewModelFactory;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -7,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.Callback;
+import transferObjects.Facility;
 import views.ViewController;
 
 import java.io.IOException;
@@ -30,6 +32,10 @@ public class FacilityScheduleAdminViewController implements ViewController {
 
     @Override
     public void init() {
+
+    }
+
+    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility){
         try {
             scheduleViewModel = ViewModelFactory.getInstance().getFacilityScheduleAdminVM();
         } catch (IOException | NotBoundException | SQLException e) {

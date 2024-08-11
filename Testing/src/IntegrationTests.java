@@ -22,7 +22,7 @@ public class IntegrationTests {
 
     @Before
     public void setUp() throws IOException, NotBoundException {
-        client = new RMIClient();  
+        client = new RMIClient();
     }
 
     @Test
@@ -34,30 +34,30 @@ public class IntegrationTests {
 
     @Test
     public void testReserveFacility() throws IOException, SQLException {
-        User user = new User("john_doe", "password123", false);
-        Schedule schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(2), user, 1);
+        User user = new User("user1", "password1", false);
+        Schedule schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(2), user, 2);
         boolean result = client.reserveFacility(schedule);
         assertTrue(result);
     }
 
     @Test
     public void testCancelReserveFacility() throws IOException, SQLException {
-        User user = new User("john_doe", "password123", false);
-        Schedule schedule = new Schedule(LocalDateTime.now(), LocalDateTime.now().plusHours(2), user, 1);
+        User user = new User("user1", "password1", false);
+        Schedule schedule = new Schedule(LocalDateTime.parse("2024-08-11T19:27:51.732565900"), LocalDateTime.parse("2024-08-11T21:27:51.735569200"), user, 2);
         boolean result = client.cancelReserveFacility(schedule);
         assertTrue(result);
     }
 
     @Test
     public void testEditFacility() throws IOException, SQLException {
-        Facility facility = new Facility(1, "Gym", "Updated description");
+        Facility facility = new Facility(10, "Gym", "Updated description");
         boolean result = client.editFacility(facility);
         assertTrue(result);
     }
 
     @Test
     public void testDeleteFacility() throws IOException, SQLException {
-        Facility facility = new Facility(1, "Gym", "A place to exercise");
+        Facility facility = new Facility(11, "Gym", "A place to exercise");
         boolean result = client.deleteFacility(facility);
         assertTrue(result);
     }
@@ -73,7 +73,7 @@ public class IntegrationTests {
     @Test
     public void testGetSchedulesForDate() throws IOException, SQLException {
         LocalDate date = LocalDate.now();
-        int facilityId = 1;
+        int facilityId = 2;
         List<Schedule> result = client.getSchedulesForDate(date, facilityId);
         assertNotNull(result);
         assertTrue(result.size() > 0);

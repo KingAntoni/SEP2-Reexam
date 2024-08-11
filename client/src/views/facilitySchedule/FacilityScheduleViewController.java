@@ -1,5 +1,6 @@
 package views.facilitySchedule;
 
+import core.ViewHandler;
 import core.ViewModelFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -9,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import transferObjects.Facility;
 import views.ViewController;
 
 import java.io.IOException;
@@ -33,6 +35,10 @@ public class FacilityScheduleViewController implements ViewController {
 
     @Override
     public void init() {
+
+    }
+
+    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility){
         try {
             scheduleViewModel = ViewModelFactory.getInstance().getFacilityScheduleVM();
         } catch (IOException | NotBoundException | SQLException e) {
