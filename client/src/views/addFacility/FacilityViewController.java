@@ -27,18 +27,13 @@ public class FacilityViewController implements ViewController {
     @FXML
     @Override
     public void init() {
-        try {
-            facilityViewModel = ViewModelFactory.getInstance().getFacilityVM();
-        } catch (IOException | NotBoundException | SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
-            return;
         }
-        facilityNameField.textProperty().bindBidirectional(facilityViewModel.facilityNameProperty());
-        facilityDescriptionField.textProperty().bindBidirectional(facilityViewModel.facilityDescriptionProperty());
-    }
 
     public void init(ViewModelFactory instance, ViewHandler viewHandler) {
+        facilityViewModel = instance.getFacilityVM();
+        facilityNameField.textProperty().bindBidirectional(facilityViewModel.facilityNameProperty());
+        facilityDescriptionField.textProperty().bindBidirectional(facilityViewModel.facilityDescriptionProperty());
+
         this.viewHandler = viewHandler;
     }
 

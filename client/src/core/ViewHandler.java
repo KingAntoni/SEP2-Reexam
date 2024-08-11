@@ -8,6 +8,7 @@ import transferObjects.Facility;
 import views.ViewController;
 import views.editFacility.EditFacilityViewController;
 import views.addFacility.FacilityViewController;
+import views.facilityMenu.FacilityMenuViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,7 +18,10 @@ public class ViewHandler {
 
     private Stage stage;
     private Scene createFacilityScene;
+    private Scene facilityMenuScene;
+    private Scene facilityMenuUserScene;
     private Scene scheduleScene;
+    private Scene scheduleAdminScene;
     private Scene loginScene;
     private Scene editFacilityScene;
     private static ViewHandler instance;
@@ -33,12 +37,15 @@ public class ViewHandler {
 
     public void start(Stage primaryStage) throws IOException, SQLException, NotBoundException {
         this.stage = primaryStage;
+        openLogin();
     }
 
     public void openFacilityMenu() {
         try {
             Parent root = loadFXML("/views/facilityMenu/FacilityMenuView.fxml");
             stage.setScene(new Scene(root));
+            FacilityMenuViewController facilityMenuViewController = new FacilityMenuViewController();
+            facilityMenuViewController.init();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
@@ -73,6 +80,23 @@ public class ViewHandler {
         stage.show();
     }
 
+    public void openEditFacility(Facility facility) throws IOException, NotBoundException, SQLException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/editFacility/EditFacilityView.fxml"));
+            Parent root = loader.load();
+
+            EditFacilityViewController controller = loader.getController();
+            controller.init(ViewModelFactory.getInstance(), this, facility);
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Edit Facility");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     public void openFacilitySchedule() {
         try {
             Parent root = loadFXML("/views/facilitySchedule/FacilityScheduleView.fxml");
@@ -95,22 +119,7 @@ public class ViewHandler {
         stage.show();
     }
 
-    public void openEditFacility(Facility facility) throws IOException, NotBoundException, SQLException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/editFacility/EditFacilityView.fxml"));
-            Parent root = loader.load();
 
-            EditFacilityViewController controller = loader.getController();
-            controller.init(ViewModelFactory.getInstance(), this, facility);
-
-            stage.setScene(new Scene(root));
-            stage.setTitle("Edit Facility");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
 
     public void openLogin(){
         try {

@@ -10,6 +10,10 @@ public class FacilityMenuViewModel {
     private final SportFacilityModel model;
     private final ObservableList<Facility> facilities;
 
+    public void init(){
+        loadFacilities();
+    }
+
     public FacilityMenuViewModel(SportFacilityModel model) {
         this.model = model;
         this.facilities = FXCollections.observableArrayList();

@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 public class FacilityMenuUserViewController implements ViewController {
 
-    private FacilityMenuUserViewModel facilityMenuViewModel;
+    private FacilityMenuUserViewModel facilityMenuUserViewModel;
     private ViewHandler viewHandler;
 
     @FXML
@@ -32,9 +32,9 @@ public class FacilityMenuUserViewController implements ViewController {
     @Override
     public void init() {
         try {
-            facilityMenuUserViewModel = ViewModelFactory.getInstance().getFacilityMenuVM();
+            facilityMenuUserViewModel = ViewModelFactory.getInstance().getFacilityMenuUserVM();
             bindTableColumns();
-            facilityTableView.setItems(facilityMenuViewModel.getFacilities());
+            facilityTableView.setItems(facilityMenuUserViewModel.getFacilities());
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
