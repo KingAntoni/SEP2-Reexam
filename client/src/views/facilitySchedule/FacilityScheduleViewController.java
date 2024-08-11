@@ -79,12 +79,18 @@ public class FacilityScheduleViewController implements ViewController {
     @FXML
     private void reserve() throws SQLException, IOException {
         if (datePicker.getValue() == null) {
-            showAlert(AlertType.ERROR, "Form Error!", "Please select a date.");
             return;
         }
+        if (scheduleListView.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+
+        String selectedTimeSlot = scheduleListView.getSelectionModel().getSelectedItem();
+        scheduleViewModel.setSelectedTimeSlot(selectedTimeSlot);
+        //scheduleViewModel.setSelectedUser(username);
+
         scheduleViewModel.reserve();
-        showAlert(AlertType.INFORMATION, "Reservation Successful", "Your reservation has been made.");
-        loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
+        loadInitialSchedule(datePicker.getValue());
     }
 
     private void showAlert(AlertType alertType, String title, String message) {
@@ -93,5 +99,10 @@ public class FacilityScheduleViewController implements ViewController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void backButtonPressed() throws IOException {
+        viewHandler.openFacilityMenuUser();
     }
 }

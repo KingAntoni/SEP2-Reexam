@@ -31,7 +31,7 @@ public class SportFacilityModelManager implements SportFacilityModel {
     @Override
     public boolean reserveFacility(Schedule schedule) throws IOException, SQLException {
         try {
-            if(schedule.getUser().getUsername().equals(null)) {
+            if(!user.isAdmin()) {
                 schedule.setUser(user);
             }
             return client.reserveFacility(schedule);

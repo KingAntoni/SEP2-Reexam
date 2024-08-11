@@ -29,12 +29,15 @@ public class FacilityMenuUserViewController implements ViewController {
     @FXML
     private TableColumn<Facility, String> descriptionColumn;
 
+    private String username;
+
     @Override
-    public void init() {
+    public void init(){
         try {
             facilityMenuUserViewModel = ViewModelFactory.getInstance().getFacilityMenuUserVM();
             bindTableColumns();
             facilityTableView.setItems(facilityMenuUserViewModel.getFacilities());
+            this.username = username;
         } catch (Exception e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
@@ -50,7 +53,7 @@ public class FacilityMenuUserViewController implements ViewController {
     public void reserveFacilityButton(ActionEvent actionEvent) {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
         if (selectedFacility != null) {
-            // Add your implementation for reserving the facility
+            viewHandler.getInstance().openFacilitySchedule(selectedFacility);
         }
     }
 

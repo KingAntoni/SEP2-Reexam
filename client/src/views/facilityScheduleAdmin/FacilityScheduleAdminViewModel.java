@@ -29,7 +29,6 @@ public class FacilityScheduleAdminViewModel {
     private final ObjectProperty<String> selectedTimeSlot = new SimpleObjectProperty<>();
     private final ObjectProperty<String> selectedUser = new SimpleObjectProperty<>();
 
-
     public FacilityScheduleAdminViewModel(SportFacilityModel model) {
         this.model = model;
         this.users = FXCollections.observableArrayList();
@@ -38,14 +37,11 @@ public class FacilityScheduleAdminViewModel {
 
     public void loadFacility(Facility facility) {
         currentFacility = facility;
+        model.setFacilityId(facility.getId()); // Ensure the facility ID is set in the model
     }
 
     public ObjectProperty<LocalDate> dateProperty() {
         return selectedDate;
-    }
-
-    public ObjectProperty<LocalTime> selectedHourProperty() {
-        return selectedHour;
     }
 
     public ListProperty<String> scheduleListProperty() {
@@ -107,6 +103,7 @@ public class FacilityScheduleAdminViewModel {
         User user = new User(username,null,false);
         Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), user, currentFacility.getId());
         model.reserveFacility(schedule);
-        loadSchedule(date); // Refresh the schedule list
+        loadSchedule(date); // Refresh the schedule list after reservation
     }
 }
+

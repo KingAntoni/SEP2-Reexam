@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import transferObjects.Facility;
+import transferObjects.User;
 import views.ViewController;
 import views.editFacility.EditFacilityViewController;
 import views.addFacility.FacilityViewController;
@@ -63,15 +64,12 @@ public class ViewHandler {
         }
     }
 
-    public void openFacilityMenuUser() {
-        try {
-            Parent root = loadFXML("/views/facilityMenu/FacilityMenuUserView.fxml");
-            stage.setScene(new Scene(root));
-            FacilityMenuUserViewController facilityMenuUserViewController = new FacilityMenuUserViewController();
-            facilityMenuUserViewController.init();
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
+    public void openFacilityMenuUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilityMenuUser/FacilityMenuUserView.fxml"));
+        Parent root = loader.load();
+        FacilityMenuUserViewController facilityMenuUserViewController = loader.getController();
+        facilityMenuUserViewController.init();
+        stage.setScene(new Scene(root));
         stage.setTitle("User Facility Menu");
         stage.show();
     }

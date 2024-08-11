@@ -31,6 +31,7 @@ public class ViewModelFactory {
         sportFacilityModel = ModelFactory.getInstance().getModel();
         createFacilityVM = new FacilityViewModel(sportFacilityModel);
         facilityMenuVM = new FacilityMenuViewModel(sportFacilityModel);
+        facilityMenuUserVM = new FacilityMenuUserViewModel(sportFacilityModel);
         editFacilityVM = new EditFacilityViewModel(sportFacilityModel);
         createFacilityScheduleVM = new FacilityScheduleViewModel(sportFacilityModel);
         createLoginVM = new LoginViewModel(sportFacilityModel);

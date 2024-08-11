@@ -346,7 +346,7 @@ public class DatabaseManager {
                 while (rs.next()) {
                     LocalDateTime startTime = LocalDateTime.parse(rs.getString("startTime"));
                     LocalDateTime endTime = LocalDateTime.parse(rs.getString("endTime"));
-                    User user = new User(rs.getString("username"), rs.getString("password"));
+                    User user = new User(rs.getString("username"), null);
                     schedules.add(new Schedule(startTime, endTime, user, facilityId));
                 }
             }

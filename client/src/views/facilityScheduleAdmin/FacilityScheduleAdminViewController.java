@@ -108,4 +108,17 @@ public class FacilityScheduleAdminViewController implements ViewController {
         scheduleViewModel.reserve();
         loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
     }
+
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    public void backButtonPressed() {
+        viewHandler.openFacilityMenu();
+    }
 }

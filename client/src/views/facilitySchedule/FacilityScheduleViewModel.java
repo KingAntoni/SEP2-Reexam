@@ -21,26 +21,26 @@ public class FacilityScheduleViewModel {
     private final ObjectProperty<LocalTime> selectedHour = new SimpleObjectProperty<>();
     private final ListProperty<String> scheduleList = new SimpleListProperty<>(FXCollections.observableArrayList());
     private Facility currentFacility;
+    private final ObjectProperty<String> selectedTimeSlot = new SimpleObjectProperty<>();
+
 
     public FacilityScheduleViewModel(SportFacilityModel model) {
         this.model = model;
+    }
+
+    public void loadFacility(Facility facility) {
+        currentFacility = facility;
+        model.setFacilityId(facility.getId()); // Ensure the facility ID is set in the model
     }
 
     public ObjectProperty<LocalDate> dateProperty() {
         return selectedDate;
     }
 
-    public ObjectProperty<LocalTime> selectedHourProperty() {
-        return selectedHour;
-    }
-
     public ListProperty<String> scheduleListProperty() {
         return scheduleList;
     }
 
-    public void loadFacility(Facility facility) {
-        currentFacility = facility;
-    }
 
     public void loadSchedule(LocalDate date) {
         scheduleList.clear();
@@ -52,6 +52,16 @@ public class FacilityScheduleViewModel {
             LocalTime endTime = startTime.plusHours(1);
             String status = schedules.stream().anyMatch(s -> s.getStartTime().toLocalTime().equals(startTime)) ? "RESERVED" : "FREE";
             scheduleList.add(startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter) + " " + status);
+        }
+    }
+
+    public void setSelectedTimeSlot(String timeSlot) {
+        selectedTimeSlot.set(timeSlot);
+        // Extract the start time from the selected time slot
+        if (timeSlot != null && !timeSlot.isEmpty()) {
+            String startTimeStr = timeSlot.split(" - ")[0];
+            LocalTime startTime = LocalTime.parse(startTimeStr, DateTimeFormatter.ofPattern("HH:mm"));
+            selectedHour.set(startTime);
         }
     }
 
