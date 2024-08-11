@@ -52,14 +52,34 @@ public class FacilityScheduleAdminViewModel {
         scheduleList.clear();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
+        // Get the list of schedules for the specified date
         List<Schedule> schedules = model.getSchedulesForDate(date);
+
+        // Iterate through the hours of the day (6 AM to 11 PM)
         for (int hour = 6; hour < 23; hour++) {
             LocalTime startTime = LocalTime.of(hour, 0);
             LocalTime endTime = startTime.plusHours(1);
-            String status = schedules.stream().anyMatch(s -> s.getStartTime().toLocalTime().equals(startTime)) ? "RESERVED" : "FREE";
+
+            // Check if there's a schedule for the current time slot
+            Schedule matchingSchedule = schedules.stream()
+                    .filter(s -> s.getStartTime().toLocalTime().equals(startTime))
+                    .findFirst()
+                    .orElse(null);
+
+            // Determine the status string
+            String status;
+            if (matchingSchedule != null) {
+                String username = matchingSchedule.getUser().getUsername();
+                status = "RESERVED by " + username;
+            } else {
+                status = "FREE";
+            }
+
+            // Add the time slot with the status to the schedule list
             scheduleList.add(startTime.format(timeFormatter) + " - " + endTime.format(timeFormatter) + " " + status);
         }
     }
+
 
     public ObservableList<String> getUsers(){
         return users;
@@ -104,6 +124,19 @@ public class FacilityScheduleAdminViewModel {
         Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), user, currentFacility.getId());
         model.reserveFacility(schedule);
         loadSchedule(date); // Refresh the schedule list after reservation
+    }
+
+    public boolean cancelReservation(String username) throws SQLException, IOException {
+        LocalDate date = selectedDate.get();
+        LocalTime startTime = selectedHour.get();
+        if (date == null || startTime == null) {
+            throw new IllegalStateException("Date or time not selected");
+        }
+
+        LocalTime endTime = startTime.plusHours(1);
+        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), new User(username,null,false), currentFacility.getId());
+
+        return model.cancelReserveFacility(schedule);
     }
 }
 

@@ -59,7 +59,7 @@ public class FacilityMenuUserViewController implements ViewController {
 
     @FXML
     public void logOutButtonPressed(ActionEvent actionEvent) {
-        // Add your implementation for logout
+        viewHandler.getInstance().openLogin();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

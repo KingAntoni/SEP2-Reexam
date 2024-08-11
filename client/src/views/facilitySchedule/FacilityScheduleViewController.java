@@ -87,11 +87,49 @@ public class FacilityScheduleViewController implements ViewController {
 
         String selectedTimeSlot = scheduleListView.getSelectionModel().getSelectedItem();
         scheduleViewModel.setSelectedTimeSlot(selectedTimeSlot);
-        //scheduleViewModel.setSelectedUser(username);
 
         scheduleViewModel.reserve();
         loadInitialSchedule(datePicker.getValue());
     }
+
+    @FXML
+    public void releaseButtonPressed() throws IOException, SQLException {
+        if (datePicker.getValue() == null) {
+            showAlert(AlertType.WARNING, "No Date Selected", "Please select a date to release a reservation.");
+            return;
+        }
+
+        if (scheduleListView.getSelectionModel().getSelectedItem() == null) {
+            showAlert(AlertType.WARNING, "No Time Slot Selected", "Please select a time slot to release the reservation.");
+            return;
+        }
+
+        String selectedTimeSlot = scheduleListView.getSelectionModel().getSelectedItem();
+        scheduleViewModel.setSelectedTimeSlot(selectedTimeSlot);
+
+        // Extract the username from the selected time slot
+        String[] timeSlotParts = selectedTimeSlot.split(" ");
+        if (timeSlotParts.length < 5 || !"RESERVED".equals(timeSlotParts[3])) {
+            showAlert(AlertType.WARNING, "Not Reserved", "The selected time slot is not reserved.");
+            return;
+        }
+
+        String username = timeSlotParts[5];
+
+        if (!scheduleViewModel.checkUsernameMatch(username)) {
+            showAlert(AlertType.ERROR, "User Mismatch", "You cannot release a reservation made by another user.");
+            return;
+        }
+
+        // Cancel the reservation
+        boolean success = scheduleViewModel.cancelReservation();
+        if (success) {
+            loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
+        } else {
+            showAlert(AlertType.ERROR, "Release Failed", "Failed to release the reservation. Please try again.");
+        }
+    }
+
 
     private void showAlert(AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);

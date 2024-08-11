@@ -21,13 +21,6 @@ import java.rmi.NotBoundException;
 public class ViewHandler {
 
     private Stage stage;
-    private Scene createFacilityScene;
-    private Scene facilityMenuScene;
-    private Scene facilityMenuUserScene;
-    private Scene scheduleScene;
-    private Scene scheduleAdminScene;
-    private Scene loginScene;
-    private Scene editFacilityScene;
     private static ViewHandler instance;
 
     private ViewHandler() {}
@@ -46,15 +39,13 @@ public class ViewHandler {
 
     public void openFacilityMenu() {
         try {
-            // Load the FXML file and get the controller
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilityMenu/FacilityMenuView.fxml"));
             Parent root = loader.load();
 
-            // Obtain the controller from the loader
             FacilityMenuViewController facilityMenuViewController = loader.getController();
             facilityMenuViewController.init(); // Initialize the controller after FXML is loaded
+            facilityMenuViewController.refresh(); // Refresh the facility list
 
-            // Set up the stage
             stage.setScene(new Scene(root));
             stage.setTitle("Admin Facility Menu");
             stage.show();
@@ -63,6 +54,7 @@ public class ViewHandler {
             // Optionally show an alert or handle the exception
         }
     }
+
 
     public void openFacilityMenuUser() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilityMenuUser/FacilityMenuUserView.fxml"));

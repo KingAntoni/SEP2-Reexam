@@ -20,4 +20,5 @@ public interface SportFacilityModel {
     List<Schedule> getSchedulesForDate(LocalDate date);
     List<User> getAllUsers() throws SQLException, IOException;
     void setFacilityId(int facilityId);
+    boolean checkUsernameMatch(String username);
 }

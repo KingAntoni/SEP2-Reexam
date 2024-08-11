@@ -118,6 +118,31 @@ public class FacilityScheduleAdminViewController implements ViewController {
     }
 
     @FXML
+    public void releaseButtonPressed() throws IOException, SQLException {
+        if (datePicker.getValue() == null) {
+            showAlert(AlertType.WARNING, "No Date Selected", "Please select a date to release a reservation.");
+            return;
+        }
+
+        if (scheduleListView.getSelectionModel().getSelectedItem() == null) {
+            showAlert(AlertType.WARNING, "No Time Slot Selected", "Please select a time slot to release the reservation.");
+            return;
+        }
+
+        String selectedTimeSlot = scheduleListView.getSelectionModel().getSelectedItem();
+        scheduleViewModel.setSelectedTimeSlot(selectedTimeSlot);
+        String[] timeSlotParts = selectedTimeSlot.split(" ");
+        String username = timeSlotParts[5];
+
+        boolean success = scheduleViewModel.cancelReservation(username);
+        if (success) {
+            loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
+        } else {
+            showAlert(AlertType.ERROR, "Release Failed", "Failed to release the reservation. Please try again.");
+        }
+    }
+
+    @FXML
     public void backButtonPressed() {
         viewHandler.openFacilityMenu();
     }

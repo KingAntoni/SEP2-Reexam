@@ -41,6 +41,11 @@ public class FacilityMenuViewController implements ViewController {
         }
     }
 
+    public void refresh() {
+        facilityMenuViewModel.loadFacilities(); // Reload the facilities list
+        facilityTableView.setItems(facilityMenuViewModel.getFacilities()); // Update the TableView
+    }
+
     private void bindTableColumns() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -64,7 +69,6 @@ public class FacilityMenuViewController implements ViewController {
         if (selectedFacility != null) {
             try {
                 facilityMenuViewModel.deleteFacility(selectedFacility);
-                // Refresh the TableView data
                 facilityTableView.setItems(facilityMenuViewModel.getFacilities());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -81,14 +85,13 @@ public class FacilityMenuViewController implements ViewController {
     public void reserveFacilityButton(ActionEvent actionEvent) {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
         if (selectedFacility != null) {
-            // Add your implementation for reserving the facility
             viewHandler.getInstance().openFacilityScheduleAdmin(selectedFacility);
         }
     }
 
     @FXML
     public void logOutButtonPressed(ActionEvent actionEvent) {
-        // Add your implementation for logout
+        viewHandler.getInstance().openLogin();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

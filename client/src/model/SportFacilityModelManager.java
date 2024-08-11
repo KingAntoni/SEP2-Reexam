@@ -24,6 +24,11 @@ public class SportFacilityModelManager implements SportFacilityModel {
     }
 
     @Override
+    public boolean checkUsernameMatch(String username) {
+        return user.getUsername().equals(username);
+    }
+
+    @Override
     public boolean createFacility(Facility facility) throws IOException, SQLException {
         return client.createFacility(facility);
     }
@@ -43,7 +48,7 @@ public class SportFacilityModelManager implements SportFacilityModel {
 
     @Override
     public boolean cancelReserveFacility(Schedule schedule) throws IOException, SQLException {
-        if(schedule.getUser().getUsername().equals(null)) {
+        if(!user.isAdmin()) {
             schedule.setUser(user);
         }
         return client.cancelReserveFacility(schedule);

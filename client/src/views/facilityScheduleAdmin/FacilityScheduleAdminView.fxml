@@ -19,7 +19,7 @@
     <ListView fx:id="scheduleListView" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
 
     <Button text="Reserve" onAction="#reserve" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-    <Button text="Back" onAction="#backButtonPressed" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-
+    <Button text="Release" onAction="#releaseButtonPressed" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+    <Button text="Back" onAction="#backButtonPressed" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
 
 </GridPane>
