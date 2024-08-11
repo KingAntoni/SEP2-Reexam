@@ -21,10 +21,11 @@ import java.util.List;
 
 public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
 
-    DatabaseManager dbm;
+    private DatabaseManager dbm;
 
     public RMIServerImpl() throws RemoteException {
         super();
+        dbm = new DatabaseManager(); // Initialize dbm here
     }
 
     @Override
@@ -39,7 +40,7 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
 
     @Override
     public boolean reserveFacility(Schedule schedule) throws RemoteException, IOException, SQLException {
-        return storeScheduleInDatabase(schedule);
+        return dbm.reserveFacility(schedule);
     }
 
     @Override
@@ -64,21 +65,14 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
 
     @Override
     public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws RemoteException, IOException, SQLException {
-            return getSchedulesForDate(date,facilityId);
+        return dbm.getSchedulesForDate(date, facilityId);
     }
-
-    private boolean storeScheduleInDatabase(Schedule schedule) {
-        return storeScheduleInDatabase(schedule);
-    }
-
 
     public static void main(String[] args) {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
-
             RMIServerImpl server = new RMIServerImpl();
             registry.rebind("Server", server);
-
             System.out.println("RMI Server is running...");
         } catch (RemoteException e) {
             System.err.println("Server exception: " + e.toString());

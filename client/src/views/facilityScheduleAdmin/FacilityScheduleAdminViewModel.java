@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import model.SportFacilityModel;
+import transferObjects.Facility;
 import transferObjects.Schedule;
 
 import java.io.IOException;
@@ -20,9 +21,14 @@ public class FacilityScheduleAdminViewModel {
     private final ObjectProperty<LocalDate> selectedDate = new SimpleObjectProperty<>();
     private final ObjectProperty<LocalTime> selectedHour = new SimpleObjectProperty<>();
     private final ListProperty<String> scheduleList = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private Facility currentFacility;
 
     public FacilityScheduleAdminViewModel(SportFacilityModel model) {
         this.model = model;
+    }
+
+    public void loadFacility(Facility facility) {
+        currentFacility = facility;
     }
 
     public ObjectProperty<LocalDate> dateProperty() {
@@ -58,7 +64,7 @@ public class FacilityScheduleAdminViewModel {
         }
 
         LocalTime endTime = startTime.plusHours(1);
-        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), null, 1); // 1 is a placeholder for the facility ID
+        Schedule schedule = new Schedule(date.atTime(startTime), date.atTime(endTime), null, currentFacility.getId());
         model.reserveFacility(schedule);
         loadSchedule(date); // Refresh the schedule list
     }

@@ -31,9 +31,6 @@ public class FacilityMenuViewController implements ViewController {
 
     @Override
     public void init() {
-    }
-
-    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility) {
         try {
             facilityMenuViewModel = ViewModelFactory.getInstance().getFacilityMenuVM();
             bindTableColumns();
@@ -84,7 +81,8 @@ public class FacilityMenuViewController implements ViewController {
     public void reserveFacilityButton(ActionEvent actionEvent) {
         Facility selectedFacility = facilityTableView.getSelectionModel().getSelectedItem();
         if (selectedFacility != null) {
-            viewHandler.openFacilityScheduleAdmin(selectedFacility);
+            // Add your implementation for reserving the facility
+            viewHandler.getInstance().openFacilityScheduleAdmin(selectedFacility);
         }
     }
 

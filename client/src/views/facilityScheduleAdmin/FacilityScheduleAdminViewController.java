@@ -30,19 +30,16 @@ public class FacilityScheduleAdminViewController implements ViewController {
     @FXML
     private ComboBox<String> facilityComboBox;
 
+    private ViewHandler viewHandler;
+
     @Override
     public void init() {
-
     }
 
     public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility){
-        try {
-            scheduleViewModel = ViewModelFactory.getInstance().getFacilityScheduleAdminVM();
-        } catch (IOException | NotBoundException | SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
-            return;
-        }
+        this.viewHandler = viewHandler;
+        scheduleViewModel = viewModelFactory.getFacilityScheduleAdminVM();
+        this.scheduleViewModel.loadFacility(facility);
 
         datePicker.setDayCellFactory(getDayCellFactory());
         datePicker.setValue(LocalDate.now());

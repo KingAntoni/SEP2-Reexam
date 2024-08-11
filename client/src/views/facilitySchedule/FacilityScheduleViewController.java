@@ -26,6 +26,7 @@ import javafx.scene.control.DateCell;
 public class FacilityScheduleViewController implements ViewController {
     private FacilityScheduleViewModel scheduleViewModel;
     private final ObjectProperty<LocalTime> selectedHour = new SimpleObjectProperty<>();
+    private ViewHandler viewHandler;
 
     @FXML
     private DatePicker datePicker;
@@ -39,13 +40,9 @@ public class FacilityScheduleViewController implements ViewController {
     }
 
     public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility){
-        try {
-            scheduleViewModel = ViewModelFactory.getInstance().getFacilityScheduleVM();
-        } catch (IOException | NotBoundException | SQLException e) {
-            e.printStackTrace();
-            showAlert(AlertType.ERROR, "Initialization Error", "Error initializing ViewModel: " + e.getMessage());
-            return;
-        }
+        this.viewHandler = viewHandler;
+        scheduleViewModel = viewModelFactory.getFacilityScheduleVM();
+        this.scheduleViewModel.loadFacility(facility);
 
         datePicker.setDayCellFactory(getDayCellFactory());
         datePicker.setValue(LocalDate.now());

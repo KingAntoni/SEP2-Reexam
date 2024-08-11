@@ -45,15 +45,22 @@ public class ViewHandler {
 
     public void openFacilityMenu() {
         try {
-            Parent root = loadFXML("/views/facilityMenu/FacilityMenuView.fxml");
+            // Load the FXML file and get the controller
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilityMenu/FacilityMenuView.fxml"));
+            Parent root = loader.load();
+
+            // Obtain the controller from the loader
+            FacilityMenuViewController facilityMenuViewController = loader.getController();
+            facilityMenuViewController.init(); // Initialize the controller after FXML is loaded
+
+            // Set up the stage
             stage.setScene(new Scene(root));
-            FacilityMenuViewController facilityMenuViewController = new FacilityMenuViewController();
-            facilityMenuViewController.init();
-        } catch (IOException | SQLException e) {
+            stage.setTitle("Admin Facility Menu");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
+            // Optionally show an alert or handle the exception
         }
-        stage.setTitle("Admin Facility Menu");
-        stage.show();
     }
 
     public void openFacilityMenuUser() {
