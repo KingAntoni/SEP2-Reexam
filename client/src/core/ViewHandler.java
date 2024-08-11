@@ -129,25 +129,28 @@ public class ViewHandler {
         stage.show();
     }
 
-    public void openFacilityScheduleAdmin(Facility facility){
+    public void openFacilityScheduleAdmin(Facility facility) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/facilityScheduleAdmin/FacilityScheduleAdminView.fxml"));
             Parent root = loader.load();
+
+            // Obtain the controller from the loader
             FacilityScheduleAdminViewController controller = loader.getController();
-            controller.init(ViewModelFactory.getInstance(), this, facility);
+
+            // Ensure that the ViewModelFactory and ViewHandler instances are correctly passed
+            ViewModelFactory viewModelFactory = ViewModelFactory.getInstance();
+            controller.init(viewModelFactory, this, facility);
+
+            // Set up the stage
             stage.setScene(new Scene(root));
             stage.setTitle("Schedule Admin");
             stage.show();
-        } catch (IOException e) {
+        } catch (IOException | SQLException | NotBoundException e) {
             e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
+            // Handle the exception or show an alert
         }
-        stage.setTitle("Schedule Admin");
-        stage.show();
     }
+
 
 
 

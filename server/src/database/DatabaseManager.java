@@ -308,6 +308,29 @@ public class DatabaseManager {
         return facilities;
     }
 
+    public List<User> readAllUsers() throws RemoteException, IOException, SQLException {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM User";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String username = rs.getString("username");
+                boolean admin = rs.getBoolean("admin");
+
+                User user = new User(username, null, admin);
+                users.add(user);
+                System.out.println("Server retrieved user: " + user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+
 
     public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws RemoteException, IOException, SQLException {
         List<Schedule> schedules = new ArrayList<>();

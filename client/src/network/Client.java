@@ -20,4 +20,5 @@ public interface Client extends Remote {
     boolean deleteFacility(Facility facility) throws IOException, SQLException;
     List<Facility> readAllFacilities() throws IOException, SQLException;
     List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws IOException, SQLException;
+    List<User> readAllUsers() throws SQLException, IOException;
 }

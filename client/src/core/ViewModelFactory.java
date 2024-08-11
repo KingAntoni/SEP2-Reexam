@@ -23,6 +23,7 @@ public class ViewModelFactory {
     private EditFacilityViewModel editFacilityVM;
     private FacilityMenuUserViewModel facilityMenuUserVM;
     private FacilityScheduleAdminViewModel createFacilityScheduleAdminVM;
+    private FacilityScheduleAdminViewModel editFacilityScheduleAdminVM;
     private SportFacilityModel sportFacilityModel;
 
 
@@ -33,6 +34,8 @@ public class ViewModelFactory {
         editFacilityVM = new EditFacilityViewModel(sportFacilityModel);
         createFacilityScheduleVM = new FacilityScheduleViewModel(sportFacilityModel);
         createLoginVM = new LoginViewModel(sportFacilityModel);
+        createFacilityScheduleAdminVM = new FacilityScheduleAdminViewModel(sportFacilityModel);
+        editFacilityScheduleAdminVM = new FacilityScheduleAdminViewModel(sportFacilityModel);
     }
 
     public static synchronized ViewModelFactory getInstance() throws IOException, NotBoundException, SQLException {
@@ -69,6 +72,8 @@ public class ViewModelFactory {
     public FacilityScheduleAdminViewModel getFacilityScheduleAdminVM() {
         return createFacilityScheduleAdminVM;
     }
+
+    public FacilityScheduleAdminViewModel getEditFacilityScheduleAdminVM() {return editFacilityScheduleAdminVM;}
 
     public SportFacilityModel getSportFacilityModel() {
         return sportFacilityModel;

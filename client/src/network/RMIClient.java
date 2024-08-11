@@ -61,7 +61,16 @@ public class RMIClient extends UnicastRemoteObject implements Client {
 
     @Override
     public List<Schedule> getSchedulesForDate(LocalDate date, int facilityId) throws IOException, SQLException {
-        return server.getSchedulesForDate(date, facilityId);
+        List<Schedule> schedules = server.getSchedulesForDate(date, facilityId);
+        schedules.forEach(schedule -> System.out.println("Client received schedule: " + schedule));
+        return schedules;
+    }
+
+    @Override
+    public List<User> readAllUsers() throws SQLException, IOException {
+        List<User> users = server.readAllUsers();
+        users.forEach(user -> System.out.println("Client received facility: " + user));
+        return users;
     }
 
     @Override

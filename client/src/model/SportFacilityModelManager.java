@@ -78,6 +78,11 @@ public class SportFacilityModelManager implements SportFacilityModel {
     }
 
     @Override
+    public List<User> getAllUsers() throws SQLException, IOException {
+        return client.readAllUsers();
+    }
+
+    @Override
     public List<Schedule> getSchedulesForDate(LocalDate date) {
         try {
             return client.getSchedulesForDate(date, facilityId);

@@ -2,6 +2,7 @@ package model;
 
 import transferObjects.Facility;
 import transferObjects.Schedule;
+import transferObjects.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,5 +18,6 @@ public interface SportFacilityModel {
     boolean deleteFacility(Facility facility) throws IOException, SQLException;
     List<Facility> getAllFacilities() throws IOException, SQLException;
     List<Schedule> getSchedulesForDate(LocalDate date);
+    List<User> getAllUsers() throws SQLException, IOException;
     void setFacilityId(int facilityId);
 }

@@ -28,7 +28,7 @@ public class FacilityScheduleAdminViewController implements ViewController {
     private ListView<String> scheduleListView;
 
     @FXML
-    private ComboBox<String> facilityComboBox;
+    private ComboBox<String> userComboBox;
 
     private ViewHandler viewHandler;
 
@@ -36,11 +36,23 @@ public class FacilityScheduleAdminViewController implements ViewController {
     public void init() {
     }
 
-    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility){
+    public void init(ViewModelFactory viewModelFactory, ViewHandler viewHandler, Facility facility) {
         this.viewHandler = viewHandler;
-        scheduleViewModel = viewModelFactory.getFacilityScheduleAdminVM();
-        this.scheduleViewModel.loadFacility(facility);
 
+        // Initialize the ViewModel
+        scheduleViewModel = viewModelFactory.getFacilityScheduleAdminVM();
+
+        if (scheduleViewModel == null) {
+            throw new IllegalStateException("FacilityScheduleAdminViewModel is not available from ViewModelFactory.");
+        }
+
+        // Load users
+        userComboBox.setItems(
+                scheduleViewModel.getUsers()
+        );
+
+        // Load the facility and set up the rest of the view
+        scheduleViewModel.loadFacility(facility);
         datePicker.setDayCellFactory(getDayCellFactory());
         datePicker.setValue(LocalDate.now());
         loadInitialSchedule(LocalDate.now());
@@ -51,10 +63,11 @@ public class FacilityScheduleAdminViewController implements ViewController {
             }
         });
 
-        // Bind the DatePicker and ListView to the ViewModel
+        // Bind properties to the ViewModel
         datePicker.valueProperty().bindBidirectional(scheduleViewModel.dateProperty());
         scheduleListView.itemsProperty().bind(scheduleViewModel.scheduleListProperty());
     }
+
 
     private void loadInitialSchedule(LocalDate date) {
         scheduleViewModel.loadSchedule(date);
@@ -76,19 +89,23 @@ public class FacilityScheduleAdminViewController implements ViewController {
     @FXML
     private void reserve() throws SQLException, IOException {
         if (datePicker.getValue() == null) {
-            showAlert(AlertType.ERROR, "Form Error!", "Please select a date.");
             return;
         }
-        scheduleViewModel.reserve();
-        showAlert(AlertType.INFORMATION, "Reservation Successful", "Your reservation has been made.");
-        loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
-    }
+        if (scheduleListView.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        if (userComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
 
-    private void showAlert(AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        // Set the selected time and user to the ViewModel
+        String selectedTimeSlot = scheduleListView.getSelectionModel().getSelectedItem();
+        String selectedUser = userComboBox.getSelectionModel().getSelectedItem();
+        scheduleViewModel.setSelectedTimeSlot(selectedTimeSlot);
+        scheduleViewModel.setSelectedUser(selectedUser);
+
+        // Attempt to reserve the facility
+        scheduleViewModel.reserve();
+        loadInitialSchedule(datePicker.getValue()); // Refresh the schedule list
     }
 }

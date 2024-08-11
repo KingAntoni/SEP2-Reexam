@@ -68,6 +68,11 @@ public class RMIServerImpl extends UnicastRemoteObject implements RMIServer {
         return dbm.getSchedulesForDate(date, facilityId);
     }
 
+    @Override
+    public List<User> readAllUsers() throws RemoteException, IOException, SQLException {
+        return dbm.readAllUsers();
+    }
+
     public static void main(String[] args) {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
